@@ -1,14 +1,19 @@
 import axios from 'axios'
 
 export class FacebookProvider {
-  async getRedirectUri (conf: any, redirect: string | null = null) {
+  async getRedirectUri (
+    conf: any,
+    redirect: string | null = null,
+    mode: 'iframe' | 'popup' | 'redirect' = 'redirect'
+  ) {
     const url = new URL('https://www.facebook.com/v13.0/dialog/oauth')
     url.searchParams.set('client_id', conf.facebookClientId)
     url.searchParams.set('redirect_uri', conf.facebookRedirect)
     url.searchParams.set(
       'state',
       JSON.stringify({
-        redirect
+        redirect,
+        mode
       })
     )
     url.searchParams.set('scope', 'email,public_profile')
@@ -43,7 +48,8 @@ export class FacebookProvider {
       firstname: me.data.first_name,
       lastname: me.data.last_name,
       avatar: me.data.picture?.data?.url ?? '',
-      redirect: state.redirect
+      redirect: state.redirect,
+      mode: state.mode
     }
   }
 }

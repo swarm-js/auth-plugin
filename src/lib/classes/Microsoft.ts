@@ -50,7 +50,11 @@ export class Microsoft {
   static init (swarm: any, conf: AuthPluginOptions) {
     return async function (request: any, reply: any) {
       const driver = new MicrosoftProvider()
-      const url = await driver.getRedirectUri(conf, request.query.redirect)
+      const url = await driver.getRedirectUri(
+        conf,
+        request.query.redirect,
+        request.query.mode ?? 'redirect'
+      )
 
       reply.redirect(302, url)
     }
@@ -74,6 +78,7 @@ export class Microsoft {
           302,
           Microsoft.buildRedirectUrl(conf, {
             redirect: ret.redirect,
+            mode: ret.mode,
             token: JWT.generate(conf, existingUser)
           })
         )
@@ -90,6 +95,7 @@ export class Microsoft {
           302,
           Microsoft.buildRedirectUrl(conf, {
             redirect: ret.redirect,
+            mode: ret.mode,
             token: JWT.generate(conf, existingUser)
           })
         )
@@ -108,6 +114,7 @@ export class Microsoft {
         302,
         Microsoft.buildRedirectUrl(conf, {
           redirect: ret.redirect,
+          mode: ret.mode,
           token: JWT.generate(conf, existingUser)
         })
       )

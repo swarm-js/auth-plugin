@@ -46,7 +46,11 @@ export class Apple {
   static init (swarm: any, conf: AuthPluginOptions) {
     return async function (request: any, reply: any) {
       const driver = new AppleProvider()
-      const url = await driver.getRedirectUri(conf, request.query.redirect)
+      const url = await driver.getRedirectUri(
+        conf,
+        request.query.redirect,
+        request.query.mode ?? 'redirect'
+      )
 
       reply.redirect(302, url)
     }
@@ -70,6 +74,7 @@ export class Apple {
           302,
           Apple.buildRedirectUrl(conf, {
             redirect: ret.redirect,
+            mode: ret.mode,
             token: JWT.generate(conf, existingUser)
           })
         )
@@ -86,6 +91,7 @@ export class Apple {
           302,
           Apple.buildRedirectUrl(conf, {
             redirect: ret.redirect,
+            mode: ret.mode,
             token: JWT.generate(conf, existingUser)
           })
         )
@@ -104,6 +110,7 @@ export class Apple {
         302,
         Apple.buildRedirectUrl(conf, {
           redirect: ret.redirect,
+          mode: ret.mode,
           token: JWT.generate(conf, existingUser)
         })
       )

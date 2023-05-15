@@ -9,7 +9,11 @@ export class GoogleProvider {
     )
   }
 
-  async getRedirectUri (conf: any, redirect: string | null = null) {
+  async getRedirectUri (
+    conf: any,
+    redirect: string | null = null,
+    mode: 'iframe' | 'popup' | 'redirect' = 'redirect'
+  ) {
     const connection = this.getConnection(conf)
     return connection.generateAuthUrl({
       access_type: 'offline',
@@ -17,7 +21,7 @@ export class GoogleProvider {
         'https://www.googleapis.com/auth/userinfo.profile',
         'https://www.googleapis.com/auth/userinfo.email'
       ],
-      state: JSON.stringify({ redirect })
+      state: JSON.stringify({ redirect, mode })
     })
   }
 
@@ -41,7 +45,8 @@ export class GoogleProvider {
       firstname: (me.data?.given_name ?? '').trim(),
       lastname: (me.data?.family_name ?? '').trim(),
       avatar: (me.data?.picture ?? '').trim(),
-      redirect: state.redirect
+      redirect: state.redirect,
+      mode: state.mode
     }
   }
 }
