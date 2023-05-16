@@ -7,4 +7,5 @@ export interface MongooseAuthPluginOptions {
   microsoft: boolean
   apple: boolean
   googleAuthenticator: boolean
+  ethereum: boolean
 }

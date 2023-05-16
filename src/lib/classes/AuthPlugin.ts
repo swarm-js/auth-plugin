@@ -1,5 +1,6 @@
 import { AuthPluginOptions } from '../interfaces/AuthPluginOptions'
 import { Apple } from './Apple'
+import { Ethereum } from './Ethereum'
 import { Facebook } from './Facebook'
 import { Fido2 } from './Fido2'
 import { Google } from './Google'
@@ -79,5 +80,6 @@ export default class AuthPlugin {
     Google.setup(swarm, conf)
     Microsoft.setup(swarm, conf)
     Apple.setup(swarm, conf)
+    Ethereum.setup(swarm, conf)
   }
 }

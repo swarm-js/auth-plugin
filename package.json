@@ -45,16 +45,21 @@
     "@simplewebauthn/browser": "^7.2.0",
     "@simplewebauthn/server": "^7.2.0",
     "axios": "^1.4.0",
+    "ethers": "^6.3.0",
     "fido2-lib": "^3.4.0",
     "googleapis": "^118.0.0",
+    "http-errors": "^2.0.0",
     "jsonwebtoken": "^9.0.0",
-    "qs": "^6.11.2"
+    "qs": "^6.11.2",
+    "siwe": "2.1.4"
   },
   "devDependencies": {
     "@ava/typescript": "^1.1.1",
     "@istanbuljs/nyc-config-typescript": "^1.0.1",
+    "@types/http-errors": "^2.0.1",
     "@types/jsonwebtoken": "^9.0.2",
     "@types/qs": "^6.9.7",
+    "@types/uuid": "^9.0.1",
     "@typescript-eslint/eslint-plugin": "^4.0.1",
     "@typescript-eslint/parser": "^4.0.1",
     "ava": "^3.12.1",

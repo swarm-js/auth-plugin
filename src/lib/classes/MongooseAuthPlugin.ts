@@ -13,6 +13,7 @@ export function MongooseAuthPlugin (
     microsoft: false,
     apple: false,
     googleAuthenticator: false,
+    ethereum: false,
     ...options
   }
 
@@ -49,4 +50,5 @@ export function MongooseAuthPlugin (
         }
       ]
     })
+  if (conf.ethereum) schema.add({ swarmEthereumWallet: 'string' })
 }
