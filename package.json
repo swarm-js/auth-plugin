@@ -46,6 +46,7 @@
     "@simplewebauthn/server": "^7.2.0",
     "argon2": "^0.30.3",
     "axios": "^1.4.0",
+    "base64url": "^3.0.1",
     "ethers": "^6.3.0",
     "fido2-lib": "^3.4.0",
     "googleapis": "^118.0.0",

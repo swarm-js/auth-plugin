@@ -66,6 +66,46 @@ export class Fido2 {
             description: 'Credential ID',
             schema: { type: 'string', format: 'uuid' }
           }
+        ],
+        returns: [
+          {
+            code: 200,
+            description: 'The user correctly authenticated himself with FIDO2',
+            schema: {
+              type: 'object',
+              properties: {
+                status: { type: 'boolean' }
+              }
+            }
+          },
+          {
+            code: 403,
+            description: 'Wrong credentials',
+            schema: {
+              type: 'object',
+              properties: {
+                statusCode: { type: 'number' },
+                code: { type: 'string' },
+                error: { type: 'string' },
+                message: { type: 'string' },
+                time: { type: 'string' }
+              }
+            }
+          },
+          {
+            code: 404,
+            description: 'Credentials not found',
+            schema: {
+              type: 'object',
+              properties: {
+                statusCode: { type: 'number' },
+                code: { type: 'string' },
+                error: { type: 'string' },
+                message: { type: 'string' },
+                time: { type: 'string' }
+              }
+            }
+          }
         ]
       }
     )
@@ -117,6 +157,20 @@ export class Fido2 {
           {
             code: 403,
             description: 'Wrong credentials',
+            schema: {
+              type: 'object',
+              properties: {
+                statusCode: { type: 'number' },
+                code: { type: 'string' },
+                error: { type: 'string' },
+                message: { type: 'string' },
+                time: { type: 'string' }
+              }
+            }
+          },
+          {
+            code: 404,
+            description: 'Credentials not found',
             schema: {
               type: 'object',
               properties: {
@@ -263,7 +317,7 @@ export class Fido2 {
 
         return { status: true }
       } catch {
-        return { status: false }
+        throw new Unauthorized()
       }
     }
   }
@@ -319,7 +373,7 @@ export class Fido2 {
           await fido.assertionResult(credential, assertionExpectations)
           return { status: true }
         } catch {
-          return { status: false }
+          throw new Unauthorized()
         }
       }
     }
