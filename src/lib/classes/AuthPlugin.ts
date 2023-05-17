@@ -1,5 +1,4 @@
 import { AuthPluginOptions } from '../interfaces/AuthPluginOptions'
-import { Apple } from './Apple'
 import { Ethereum } from './Ethereum'
 import { Facebook } from './Facebook'
 import { fastifyMiddleware } from './FastifyMiddleware'
@@ -106,7 +105,6 @@ export default class AuthPlugin {
     Facebook.setup(swarm, conf)
     Google.setup(swarm, conf)
     Microsoft.setup(swarm, conf)
-    Apple.setup(swarm, conf)
     Ethereum.setup(swarm, conf)
   }
 }

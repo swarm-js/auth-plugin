@@ -19,9 +19,6 @@ export interface AuthPluginOptions extends MongooseAuthPluginOptions {
   microsoftClientId: string
   microsoftClientSecret: string
   microsoftRedirect: string
-  appleClientId: string
-  appleClientSecret: string
-  appleRedirect: string
   emailField: string
   firstnameField: string
   lastnameField: string
