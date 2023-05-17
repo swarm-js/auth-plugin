@@ -85,6 +85,7 @@ export class Facebook {
         .exec()
       if (existingUser) {
         existingUser.swarmFacebookId = ret.id
+        existingUser.swarmValidated = true
         await existingUser.save()
         reply.redirect(
           302,
@@ -101,7 +102,8 @@ export class Facebook {
         [conf.firstnameField]: ret.firstname,
         [conf.lastnameField]: ret.lastname,
         [conf.avatarField]: ret.avatar,
-        swarmFacebookId: ret.id
+        swarmFacebookId: ret.id,
+        swarmValidated: true
       })
 
       reply.redirect(

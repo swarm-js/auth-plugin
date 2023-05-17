@@ -81,6 +81,7 @@ export class Google {
         .exec()
       if (existingUser) {
         existingUser.swarmGoogleId = ret.id
+        existingUser.swarmValidated = true
         await existingUser.save()
         reply.redirect(
           302,
@@ -97,7 +98,8 @@ export class Google {
         [conf.firstnameField]: ret.firstname,
         [conf.lastnameField]: ret.lastname,
         [conf.avatarField]: ret.avatar,
-        swarmGoogleId: ret.id
+        swarmGoogleId: ret.id,
+        swarmValidated: true
       })
 
       reply.redirect(
