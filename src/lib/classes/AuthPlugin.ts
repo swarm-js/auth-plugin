@@ -5,7 +5,6 @@ import { fastifyMiddleware } from './FastifyMiddleware'
 import { Fido2 } from './Fido2'
 import { Google } from './Google'
 import { GoogleAuthenticator } from './GoogleAuthenticator'
-import { Microsoft } from './Microsoft'
 import { Passkey } from './Passkey'
 import { Password } from './Password'
 import { UI } from './UI'
@@ -32,8 +31,6 @@ export default class AuthPlugin {
       passkey: false,
       facebook: false,
       google: false,
-      microsoft: false,
-      apple: false,
       ethereum: false,
       emailField: 'email',
       firstnameField: 'firstname',
@@ -47,12 +44,6 @@ export default class AuthPlugin {
       facebookClientId: '',
       facebookClientSecret: '',
       facebookRedirect: '',
-      microsoftClientId: '',
-      microsoftClientSecret: '',
-      microsoftRedirect: '',
-      appleClientId: '',
-      appleClientSecret: '',
-      appleRedirect: '',
       ...options
     }
 
@@ -104,7 +95,6 @@ export default class AuthPlugin {
     Fido2.setup(swarm, conf)
     Facebook.setup(swarm, conf)
     Google.setup(swarm, conf)
-    Microsoft.setup(swarm, conf)
     Ethereum.setup(swarm, conf)
   }
 }

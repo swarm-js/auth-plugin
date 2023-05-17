@@ -4,7 +4,6 @@ export interface MongooseAuthPluginOptions {
   passkey: boolean
   facebook: boolean
   google: boolean
-  microsoft: boolean
   googleAuthenticator: boolean
   ethereum: boolean
 }
