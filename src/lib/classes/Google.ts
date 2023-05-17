@@ -46,11 +46,7 @@ export class Google {
   static init (swarm: any, conf: AuthPluginOptions) {
     return async function (request: any, reply: any) {
       const driver = new GoogleProvider()
-      const url = await driver.getRedirectUri(
-        conf,
-        request.query.redirect,
-        request.query.mode ?? 'redirect'
-      )
+      const url = await driver.getRedirectUri(conf, request.query.redirect)
 
       reply.redirect(302, url)
     }
@@ -74,7 +70,6 @@ export class Google {
           302,
           Google.buildRedirectUrl(conf, {
             redirect: ret.redirect,
-            mode: ret.mode,
             token: JWT.generate(conf, existingUser)
           })
         )
@@ -91,7 +86,6 @@ export class Google {
           302,
           Google.buildRedirectUrl(conf, {
             redirect: ret.redirect,
-            mode: ret.mode,
             token: JWT.generate(conf, existingUser)
           })
         )
@@ -110,7 +104,6 @@ export class Google {
         302,
         Google.buildRedirectUrl(conf, {
           redirect: ret.redirect,
-          mode: ret.mode,
           token: JWT.generate(conf, existingUser)
         })
       )

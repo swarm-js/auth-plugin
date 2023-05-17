@@ -109,7 +109,8 @@ export class Password {
               type: 'object',
               properties: {
                 token: { type: 'string' },
-                totpNeeded: { type: 'boolean' }
+                totpNeeded: { type: 'boolean' },
+                validationRequired: { type: 'boolean' }
               }
             }
           },
@@ -311,7 +312,11 @@ export class Password {
         )
           totpNeeded = true
 
-        return { token: JWT.generate(conf, user, totpNeeded), totpNeeded }
+        return {
+          token: JWT.generate(conf, user, totpNeeded, user.swarmValidated),
+          totpNeeded,
+          validationRequired: user.swarmValidated
+        }
       } catch {
         throw new Unauthorized()
       }

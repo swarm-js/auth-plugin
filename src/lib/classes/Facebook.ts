@@ -50,11 +50,7 @@ export class Facebook {
   static init (swarm: any, conf: AuthPluginOptions) {
     return async function (request: any, reply: any) {
       const driver = new FacebookProvider()
-      const url = await driver.getRedirectUri(
-        conf,
-        request.query.redirect,
-        request.query.mode ?? 'redirect'
-      )
+      const url = await driver.getRedirectUri(conf, request.query.redirect)
 
       reply.redirect(302, url)
     }
@@ -78,7 +74,6 @@ export class Facebook {
           302,
           Facebook.buildRedirectUrl(conf, {
             redirect: ret.redirect,
-            mode: ret.mode,
             token: JWT.generate(conf, existingUser)
           })
         )
@@ -95,7 +90,6 @@ export class Facebook {
           302,
           Facebook.buildRedirectUrl(conf, {
             redirect: ret.redirect,
-            mode: ret.mode,
             token: JWT.generate(conf, existingUser)
           })
         )
@@ -114,7 +108,6 @@ export class Facebook {
         302,
         Facebook.buildRedirectUrl(conf, {
           redirect: ret.redirect,
-          mode: ret.mode,
           token: JWT.generate(conf, existingUser)
         })
       )
