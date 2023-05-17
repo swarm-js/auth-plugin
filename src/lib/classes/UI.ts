@@ -65,6 +65,26 @@ export class UI {
         ]
       }
     )
+
+    swarm.controllers.addMethod(
+      conf.controllerName,
+      UI.getRegisterUI(swarm, conf),
+      {
+        method: 'GET',
+        route: '/confirm-email',
+        title: 'Displays an UI to confirm an email',
+        returns: [
+          {
+            code: 200,
+            description: 'HTML page',
+            mimeType: 'text/html',
+            schema: {
+              type: 'string'
+            }
+          }
+        ]
+      }
+    )
   }
 
   static getLoginUI (swarm: any, conf: AuthPluginOptions) {

@@ -4,11 +4,13 @@ export interface AuthPluginOptions extends MongooseAuthPluginOptions {
   controllerName: string
   prefix: string
   jwtKey: string
+  logo: string | null
   access: string | string[] | null
   rpName: null | string
   rpId: null | string
   origin: null | string
   model: any
+  validationRequired: boolean
   googleClientId: string
   googleClientSecret: string
   googleRedirect: string

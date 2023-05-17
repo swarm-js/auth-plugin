@@ -54,6 +54,7 @@ export class Fido2 {
         method: 'GET',
         route: '/fido2/:id/auth-options',
         title: 'Get FIDO2 auth options',
+        access: ['swarm:loggedIn'],
         parameters: [
           {
             name: 'id',
@@ -71,6 +72,7 @@ export class Fido2 {
         method: 'POST',
         route: '/fido2/:id/authenticate',
         title: 'Authenticate logged in user with FIDO2 credentials',
+        access: ['swarm:loggedIn'],
         parameters: [
           {
             name: 'id',

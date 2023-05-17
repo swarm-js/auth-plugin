@@ -13,6 +13,7 @@ export function fastifyMiddleware (conf: AuthPluginOptions) {
           const decoded: any = jwt.verify(token, conf.jwtKey)
           req.user = await conf.model.findById(decoded.id)
           req.totpNeeded = !!decoded.totpNeeded
+          req.validationRequired = !!decoded.validationRequired
           req.userToken = decoded
         } catch {}
         break

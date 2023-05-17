@@ -5,7 +5,8 @@ export class JWT {
   static generate (
     conf: AuthPluginOptions,
     user: any,
-    totpNeeded: boolean = false
+    totpNeeded: boolean = false,
+    validationRequired: boolean = false
   ) {
     const exp = Math.floor(Date.now() / 1000) + 3600
 
@@ -13,6 +14,7 @@ export class JWT {
       {
         id: user.id,
         totpNeeded,
+        validationRequired,
         exp
       },
       conf.jwtKey

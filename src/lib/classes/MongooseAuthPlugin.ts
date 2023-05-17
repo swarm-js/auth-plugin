@@ -17,7 +17,11 @@ export function MongooseAuthPlugin (
     ...options
   }
 
-  schema.add({ swarmUserAccess: [String] })
+  schema.add({
+    swarmUserAccess: [String],
+    swarmValidated: { type: Boolean, default: false },
+    swarmValidationCode: { type: String }
+  })
 
   if (conf.password) schema.add({ swarmPassword: 'string' })
   if (conf.facebook) schema.add({ swarmFacebookId: 'string' })

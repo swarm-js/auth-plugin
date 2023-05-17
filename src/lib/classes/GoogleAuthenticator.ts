@@ -15,7 +15,7 @@ export class GoogleAuthenticator {
         route: '/authenticator',
         title:
           'Get the QRCode to attach logged in account to Google Authenticator',
-        access: ['loggedIn'],
+        access: ['swarm:loggedIn'],
         returns: [
           {
             code: 200,
@@ -55,7 +55,7 @@ export class GoogleAuthenticator {
         route: '/authenticator/validate',
         title:
           'Validate the authenticator and permanently attaches it to the logged in user',
-        access: ['loggedIn'],
+        access: ['swarm:loggedIn'],
         accepts: {
           type: 'object',
           properties: {
@@ -116,7 +116,7 @@ export class GoogleAuthenticator {
         method: 'POST',
         route: '/authenticator/verify',
         title: 'Verifies a TOTP against saved authenticator',
-        access: ['totpNeeded'],
+        access: ['swarm:totpNeeded'],
         accepts: {
           type: 'object',
           properties: {
@@ -177,7 +177,7 @@ export class GoogleAuthenticator {
         method: 'DELETE',
         route: '/authenticator',
         title: 'Deletes the attached authenticator',
-        access: ['loggedIn'],
+        access: ['swarm:loggedIn'],
         returns: [
           {
             code: 204,

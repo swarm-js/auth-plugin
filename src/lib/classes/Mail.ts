@@ -6,14 +6,14 @@ export class Mail {
   preview: string
   width: number
 
-  constructor (width: number = 600) {
+  constructor (preview: string, width: number = 600) {
     this.width = width
     this.blocks = []
-    this.preview = ''
+    this.preview = preview
   }
 
-  static create (width: number = 600) {
-    return new Mail(width)
+  static create (preview: string, width: number = 600) {
+    return new Mail(preview, width)
   }
 
   header (options: Partial<MailHeaderOptions>) {
@@ -261,6 +261,98 @@ export class Mail {
                       </div>
                     </td>
                   </tr>
+                </tbody>
+              </table>
+            </div>
+            <!--[if mso | IE]>
+          </td>
+        
+      </tr>
+    
+                </table>
+              <![endif]-->
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <!--[if mso | IE]>
+        </td>
+      </tr>
+    </table>
+    <![endif]-->`)
+
+    return this
+  }
+
+  button (text: string, url: string) {
+    this.blocks.push(`<!--[if mso | IE]>
+    <table
+       align="center" border="0" cellpadding="0" cellspacing="0" class="" style="width:${this.width}px;" width="${this.width}"
+    >
+      <tr>
+        <td style="line-height:0px;font-size:0px;mso-line-height-rule:exactly;">
+    <![endif]-->
+  <div style="margin: 0px auto; max-width: ${this.width}px">
+    <table
+      align="center"
+      border="0"
+      cellpadding="0"
+      cellspacing="0"
+      role="presentation"
+      style="width: 100%"
+    >
+      <tbody>
+        <tr>
+          <td
+            style="
+              direction: ltr;
+              font-size: 0px;
+              padding: 20px 0;
+              text-align: center;
+            "
+          >
+            <!--[if mso | IE]>
+                <table role="presentation" border="0" cellpadding="0" cellspacing="0">
+              
+      <tr>
+    
+          <td
+             class="" style="vertical-align:top;width:${this.width}px;"
+          >
+        <![endif]-->
+            <div
+              class="mj-column-per-100 mj-outlook-group-fix"
+              style="
+                font-size: 0px;
+                text-align: left;
+                direction: ltr;
+                display: inline-block;
+                vertical-align: top;
+                width: 100%;
+              "
+            >
+              <table
+                border="0"
+                cellpadding="0"
+                cellspacing="0"
+                role="presentation"
+                style="vertical-align: top"
+                width="100%"
+              >
+                <tbody>
+                    <tr>
+                        <td align="left" vertical-align="middle" style="font-size:0px;padding:10px 25px;word-break:break-word;">
+                        <table border="0" cellpadding="0" cellspacing="0" role="presentation" style="border-collapse:separate;line-height:100%;">
+                            <tbody><tr>
+                            <td align="center" bgcolor="#2e58ff" role="presentation" style="border:none;border-radius:30px;cursor:auto;mso-padding-alt:10px 25px;background:#2e58ff;" valign="middle">
+                                <a href="${url}" style="display: inline-block; background: #2e58ff; color: #ffffff; font-family: Helvetica, Arial, sans-serif; font-size: 14px; font-weight: bold; line-height: 30px; margin: 0; text-decoration: none; text-transform: uppercase; padding: 10px 
+        25px; mso-padding-alt: 0px; border-radius: 30px;" target="_blank"> ${text} </a>
+                            </td>
+                            </tr>
+                        </tbody></table>
+                        </td>
+                    </tr>
                 </tbody>
               </table>
             </div>

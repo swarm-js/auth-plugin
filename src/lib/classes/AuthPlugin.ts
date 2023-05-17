@@ -23,6 +23,8 @@ export default class AuthPlugin {
       prefix: '/auth',
       jwtKey: 'asupersecretnotsosecret',
       model: null,
+      validationRequired: false,
+      logo: null,
       access: null,
       rpName: null,
       rpId: null,
@@ -62,6 +64,7 @@ export default class AuthPlugin {
     swarm.fastify.decorateRequest('user', null)
     swarm.fastify.decorateRequest('userToken', null)
     swarm.fastify.decorateRequest('totpNeeded', false)
+    swarm.fastify.decorateRequest('validationRequired', false)
     swarm.fastify.addHook('preHandler', fastifyMiddleware(conf))
 
     // Set auth documentation to bearer
@@ -69,9 +72,12 @@ export default class AuthPlugin {
 
     // Handle user access
     swarm.setOption('getUserAccess', (req: any) => {
-      if (req.user && req.totpNeeded) return ['totpNeeded']
+      if (req.user && req.validationRequired)
+        return ['swarm:validationRequired']
+      if (req.user && req.totpNeeded) return ['swarm:totpNeeded']
 
-      if (req.user) return ['loggedIn', ...(req.user.swarmUserAccess ?? [])]
+      if (req.user)
+        return ['swarm:loggedIn', ...(req.user.swarmUserAccess ?? [])]
 
       return null
     })
