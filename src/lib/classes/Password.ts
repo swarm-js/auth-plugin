@@ -313,9 +313,9 @@ export class Password {
           totpNeeded = true
 
         return {
-          token: JWT.generate(conf, user, totpNeeded, user.swarmValidated),
+          token: JWT.generate(conf, user, totpNeeded, !user.swarmValidated),
           totpNeeded,
-          validationRequired: user.swarmValidated
+          validationRequired: !user.swarmValidated && conf.validationRequired
         }
       } catch {
         throw new Unauthorized()

@@ -26,8 +26,6 @@ export function MongooseAuthPlugin (
   if (conf.password) schema.add({ swarmPassword: 'string' })
   if (conf.facebook) schema.add({ swarmFacebookId: 'string' })
   if (conf.google) schema.add({ swarmGoogleId: 'string' })
-  if (conf.microsoft) schema.add({ swarmMicrosoftId: 'string' })
-  if (conf.apple) schema.add({ swarmAppleId: 'string' })
   if (conf.googleAuthenticator)
     schema.add({
       swarmGoogleAuthenticatorSecret: 'string',
@@ -37,6 +35,7 @@ export function MongooseAuthPlugin (
     schema.add({
       swarmFido2Credentials: [
         {
+          id: String,
           deviceName: String,
           challenge: Buffer,
           authChallenge: Buffer,
