@@ -5,7 +5,6 @@ export interface AuthPluginOptions extends MongooseAuthPluginOptions {
   prefix: string
   jwtKey: string
   logo: string | null
-  access: string | string[] | null
   rpName: null | string
   rpId: null | string
   origin: null | string

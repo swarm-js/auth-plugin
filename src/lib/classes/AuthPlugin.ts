@@ -25,7 +25,6 @@ export default class AuthPlugin {
       model: null,
       validationRequired: false,
       logo: null,
-      access: null,
       rpName: null,
       rpId: null,
       origin: null,
