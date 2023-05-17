@@ -2,6 +2,7 @@ import { AuthPluginOptions } from '../interfaces/AuthPluginOptions'
 import { Apple } from './Apple'
 import { Ethereum } from './Ethereum'
 import { Facebook } from './Facebook'
+import { fastifyMiddleware } from './FastifyMiddleware'
 import { Fido2 } from './Fido2'
 import { Google } from './Google'
 import { GoogleAuthenticator } from './GoogleAuthenticator'
@@ -33,11 +34,13 @@ export default class AuthPlugin {
       google: false,
       microsoft: false,
       apple: false,
+      ethereum: false,
       emailField: 'email',
       firstnameField: 'firstname',
       lastnameField: 'lastname',
       avatarField: 'avatar',
       googleAuthenticator: false,
+      googleAuthenticatorService: instance.getOption('title') ?? 'AuthPlugin',
       googleClientId: '',
       googleClientSecret: '',
       googleRedirect: '',
@@ -55,6 +58,24 @@ export default class AuthPlugin {
 
     if (conf.model === null) throw new Error('Mongoose model is not defined')
 
+    // Add decorators and middlewares to fastify
+    swarm.fastify.decorateRequest('user', null)
+    swarm.fastify.decorateRequest('userToken', null)
+    swarm.fastify.decorateRequest('totpNeeded', false)
+    swarm.fastify.addHook('preHandler', fastifyMiddleware(conf))
+
+    // Set auth documentation to bearer
+    swarm.bearerAuth('JWT')
+
+    // Handle user access
+    swarm.setOption('getUserAccess', (req: any) => {
+      if (req.user && req.totpNeeded) return ['totpNeeded']
+
+      if (req.user) return ['loggedIn', ...(req.user.swarmUserAccess ?? [])]
+
+      return null
+    })
+
     if (conf.passkey && (!conf.rpId || !conf.rpName || !conf.origin))
       throw new Error(
         'When using passkeys, rpName, rpId and origin fields are required'
@@ -65,6 +86,7 @@ export default class AuthPlugin {
         'When using FIDO2, rpName, rpId and origin fields are required'
       )
 
+    // Register controllers
     instance.controllers.addController(conf.controllerName, {
       title: 'Auth',
       description: 'Handles auth with various methods',

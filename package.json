@@ -50,6 +50,8 @@
     "googleapis": "^118.0.0",
     "http-errors": "^2.0.0",
     "jsonwebtoken": "^9.0.0",
+    "otplib": "^12.0.1",
+    "qrcode": "^1.5.3",
     "qs": "^6.11.2",
     "siwe": "2.1.4"
   },
@@ -58,6 +60,7 @@
     "@istanbuljs/nyc-config-typescript": "^1.0.1",
     "@types/http-errors": "^2.0.1",
     "@types/jsonwebtoken": "^9.0.2",
+    "@types/qrcode": "^1.5.0",
     "@types/qs": "^6.9.7",
     "@types/uuid": "^9.0.1",
     "@typescript-eslint/eslint-plugin": "^4.0.1",

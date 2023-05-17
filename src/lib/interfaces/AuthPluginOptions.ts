@@ -25,4 +25,5 @@ export interface AuthPluginOptions extends MongooseAuthPluginOptions {
   firstnameField: string
   lastnameField: string
   avatarField: string
+  googleAuthenticatorService: string
 }

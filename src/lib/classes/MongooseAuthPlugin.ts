@@ -17,13 +17,18 @@ export function MongooseAuthPlugin (
     ...options
   }
 
+  schema.add({ swarmUserAccess: [String] })
+
   if (conf.password) schema.add({ swarmPassword: 'string' })
   if (conf.facebook) schema.add({ swarmFacebookId: 'string' })
   if (conf.google) schema.add({ swarmGoogleId: 'string' })
   if (conf.microsoft) schema.add({ swarmMicrosoftId: 'string' })
   if (conf.apple) schema.add({ swarmAppleId: 'string' })
   if (conf.googleAuthenticator)
-    schema.add({ swarmGoogleAuthenticatorSecret: 'string' })
+    schema.add({
+      swarmGoogleAuthenticatorSecret: 'string',
+      swarmGoogleAuthenticatorPending: 'boolean'
+    })
   if (conf.fido2)
     schema.add({
       swarmFido2Credentials: [
