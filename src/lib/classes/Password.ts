@@ -110,7 +110,8 @@ export class Password {
               properties: {
                 token: { type: 'string' },
                 totpNeeded: { type: 'boolean' },
-                validationRequired: { type: 'boolean' }
+                validationRequired: { type: 'boolean' },
+                haveTotp: { type: 'boolean' }
               }
             }
           },
@@ -315,7 +316,10 @@ export class Password {
         return {
           token: JWT.generate(conf, user, totpNeeded, !user.swarmValidated),
           totpNeeded,
-          validationRequired: !user.swarmValidated && conf.validationRequired
+          validationRequired: !user.swarmValidated && conf.validationRequired,
+          haveTotp:
+            !!user.swarmGoogleAuthenticatorSecret &&
+            !user.swarmGoogleAuthenticatorPending
         }
       } catch {
         throw new Unauthorized()
