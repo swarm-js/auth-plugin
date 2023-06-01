@@ -42,6 +42,7 @@
     "node": ">=10"
   },
   "dependencies": {
+    "@fastify/static": "^6.10.2",
     "@simplewebauthn/browser": "^7.2.0",
     "@simplewebauthn/server": "^7.2.0",
     "argon2": "^0.30.3",

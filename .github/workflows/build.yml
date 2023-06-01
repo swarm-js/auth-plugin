@@ -15,6 +15,10 @@ jobs:
           node-version: 16
       - run: yarn
       - run: yarn build
+      - run: yarn
+        working-directory: ./front
+      - run: yarn build
+        working-directory: ./front
       - uses: JS-DevTools/npm-publish@v1
         with:
           token: ${{ secrets.NPM_TOKEN }}
