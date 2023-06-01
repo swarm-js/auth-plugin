@@ -5,7 +5,6 @@ import { fastifyMiddleware } from './FastifyMiddleware'
 import { Fido2 } from './Fido2'
 import { Google } from './Google'
 import { GoogleAuthenticator } from './GoogleAuthenticator'
-import { Passkey } from './Passkey'
 import { Password } from './Password'
 import { UI } from './UI'
 
@@ -28,7 +27,6 @@ export default class AuthPlugin {
       origin: null,
       password: true,
       fido2: false,
-      passkey: false,
       facebook: false,
       google: false,
       ethereum: false,
@@ -71,11 +69,6 @@ export default class AuthPlugin {
       return null
     })
 
-    if (conf.passkey && (!conf.rpId || !conf.rpName || !conf.origin))
-      throw new Error(
-        'When using passkeys, rpName, rpId and origin fields are required'
-      )
-
     if (conf.fido2 && (!conf.rpId || !conf.rpName || !conf.origin))
       throw new Error(
         'When using FIDO2, rpName, rpId and origin fields are required'
@@ -90,7 +83,6 @@ export default class AuthPlugin {
 
     UI.setup(swarm, conf)
     Password.setup(swarm, conf)
-    Passkey.setup(swarm, conf)
     GoogleAuthenticator.setup(swarm, conf)
     Fido2.setup(swarm, conf)
     Facebook.setup(swarm, conf)

@@ -7,11 +7,8 @@ export function MongooseAuthPlugin (
   const conf: MongooseAuthPluginOptions = {
     password: true,
     fido2: false,
-    passkey: false,
     facebook: false,
     google: false,
-    microsoft: false,
-    apple: false,
     googleAuthenticator: false,
     ethereum: false,
     ...options
@@ -41,20 +38,6 @@ export function MongooseAuthPlugin (
           authChallenge: Buffer,
           publicKey: String,
           prevCounter: Number
-        }
-      ]
-    })
-  if (conf.passkey)
-    schema.add({
-      swarmPasskeyCurrentChallenge: String,
-      swarmPasskeys: [
-        {
-          credentialID: { type: String, index: true },
-          credentialPublicKey: Buffer,
-          counter: Number,
-          credentialDeviceType: String,
-          credentialBackedUp: Boolean,
-          transports: [{ type: String }]
         }
       ]
     })
