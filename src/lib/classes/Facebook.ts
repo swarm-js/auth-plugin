@@ -47,7 +47,7 @@ export class Facebook {
     )
   }
 
-  static init (swarm: any, conf: AuthPluginOptions) {
+  static init (_: any, conf: AuthPluginOptions) {
     return async function (request: any, reply: any) {
       const driver = new FacebookProvider()
       const url = await driver.getRedirectUri(conf, request.query.redirect)
@@ -60,7 +60,7 @@ export class Facebook {
     return `${conf.prefix}/login?${qs.stringify(query)}`
   }
 
-  static callback (swarm: any, conf: AuthPluginOptions) {
+  static callback (_: any, conf: AuthPluginOptions) {
     return async function (request: any, reply: any) {
       const driver = new FacebookProvider()
       const ret = await driver.callback(conf, request.query)

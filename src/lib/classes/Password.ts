@@ -136,7 +136,7 @@ export class Password {
 
     swarm.controllers.addMethod(
       conf.controllerName,
-      Password.changePassword(swarm, conf),
+      Password.changePassword(),
       {
         method: 'PUT',
         route: '/password',
@@ -290,7 +290,7 @@ export class Password {
     return await user.sendEmail('Confirm your email address', html)
   }
 
-  static login (swarm: any, conf: AuthPluginOptions) {
+  static login (_: any, conf: AuthPluginOptions) {
     return async function (request: any) {
       const user = await conf.model.findOne({
         [conf.emailField]: request.body.email
@@ -327,7 +327,7 @@ export class Password {
     }
   }
 
-  static changePassword (swarm: any, conf: AuthPluginOptions) {
+  static changePassword () {
     return async function (request: any) {
       try {
         const passwordValid = await Crypt.verify(
@@ -346,7 +346,7 @@ export class Password {
     }
   }
 
-  static confirmEmail (swarm: any, conf: AuthPluginOptions) {
+  static confirmEmail (_: any, conf: AuthPluginOptions) {
     return async function (request: any) {
       const user = await conf.model.findOne({
         swarmValidationCode: request.body.code

@@ -95,7 +95,7 @@ export class UI {
   }
 
   static getLoginUI (swarm: any, conf: AuthPluginOptions) {
-    return async function (request: any) {
+    return async function () {
       return await UI.getIndexFile(
         'Login',
         `window.AuthPluginConf = ${JSON.stringify({
@@ -115,7 +115,7 @@ export class UI {
   }
 
   static getRegisterUI (swarm: any, conf: AuthPluginOptions) {
-    return async function (request: any) {
+    return async function () {
       return await UI.getIndexFile(
         'Login',
         `window.AuthPluginConf = ${JSON.stringify({
@@ -135,7 +135,7 @@ export class UI {
   }
 
   static getConfirmEmailUI (swarm: any, conf: AuthPluginOptions) {
-    return async function (request: any) {
+    return async function () {
       return await UI.getIndexFile(
         'Login',
         `window.AuthPluginConf = ${JSON.stringify({

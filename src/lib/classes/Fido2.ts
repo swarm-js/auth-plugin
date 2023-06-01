@@ -110,23 +110,19 @@ export class Fido2 {
       }
     )
 
-    swarm.controllers.addMethod(
-      conf.controllerName,
-      Fido2.fido2AuthOptions(swarm, conf),
-      {
-        method: 'GET',
-        route: '/fido2/:id/auth-options',
-        title: 'Get FIDO2 auth options',
-        access: ['swarm:loggedIn'],
-        parameters: [
-          {
-            name: 'id',
-            description: 'Credential ID',
-            schema: { type: 'string', format: 'uuid' }
-          }
-        ]
-      }
-    )
+    swarm.controllers.addMethod(conf.controllerName, Fido2.fido2AuthOptions(), {
+      method: 'GET',
+      route: '/fido2/:id/auth-options',
+      title: 'Get FIDO2 auth options',
+      access: ['swarm:loggedIn'],
+      parameters: [
+        {
+          name: 'id',
+          description: 'Credential ID',
+          schema: { type: 'string', format: 'uuid' }
+        }
+      ]
+    })
 
     swarm.controllers.addMethod(
       conf.controllerName,
@@ -245,7 +241,7 @@ export class Fido2 {
     )
   }
 
-  static fido2Init (swarm: any, conf: AuthPluginOptions) {
+  static fido2Init (_: any, conf: AuthPluginOptions) {
     return async function (request: any) {
       const registrationOptions = await fido.attestationOptions()
 
@@ -270,7 +266,7 @@ export class Fido2 {
     }
   }
 
-  static fido2Register (swarm: any, conf: AuthPluginOptions) {
+  static fido2Register (_: any, conf: AuthPluginOptions) {
     return async function (request: any) {
       const { credential } = request.body
 
@@ -322,7 +318,7 @@ export class Fido2 {
     }
   }
 
-  static fido2AuthOptions (swarm: any, conf: AuthPluginOptions) {
+  static fido2AuthOptions () {
     return async function (request: any) {
       const authnOptions = await fido.assertionOptions()
 
@@ -342,7 +338,7 @@ export class Fido2 {
     }
   }
 
-  static fido2Authenticate (swarm: any, conf: AuthPluginOptions) {
+  static fido2Authenticate (_: any, conf: AuthPluginOptions) {
     return async function (request: any) {
       const { credential } = request.body
 
@@ -379,7 +375,7 @@ export class Fido2 {
     }
   }
 
-  static fido2Login (swarm: any, conf: AuthPluginOptions) {
+  static fido2Login (_: any, conf: AuthPluginOptions) {
     return async function (request: any) {
       const user = await conf.model.findOne({
         'swarmFido2Credentials.id': request.params.id

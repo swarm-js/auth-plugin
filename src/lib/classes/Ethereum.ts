@@ -10,29 +10,25 @@ export class Ethereum {
   static setup (swarm: any, conf: AuthPluginOptions) {
     if (!conf.ethereum) return
 
-    swarm.controllers.addMethod(
-      conf.controllerName,
-      Ethereum.nonce(swarm, conf),
-      {
-        method: 'GET',
-        route: '/ethereum/nonce',
-        title: 'Get nonce value',
-        returns: [
-          {
-            code: 200,
-            description: 'Nonce code and requestId',
-            mimeType: 'application/json',
-            schema: {
-              type: 'object',
-              properties: {
-                requestId: { type: 'string' },
-                nonce: { type: 'string' }
-              }
+    swarm.controllers.addMethod(conf.controllerName, Ethereum.nonce(), {
+      method: 'GET',
+      route: '/ethereum/nonce',
+      title: 'Get nonce value',
+      returns: [
+        {
+          code: 200,
+          description: 'Nonce code and requestId',
+          mimeType: 'application/json',
+          schema: {
+            type: 'object',
+            properties: {
+              requestId: { type: 'string' },
+              nonce: { type: 'string' }
             }
           }
-        ]
-      }
-    )
+        }
+      ]
+    })
 
     swarm.controllers.addMethod(
       conf.controllerName,
@@ -73,8 +69,8 @@ export class Ethereum {
     )
   }
 
-  static nonce (swarm: any, conf: AuthPluginOptions) {
-    return async function (request: any, reply: any) {
+  static nonce () {
+    return async function () {
       const requestId: string = uuid()
       const nonce: string = generateNonce()
       nonces[requestId] = nonce
@@ -83,7 +79,7 @@ export class Ethereum {
     }
   }
 
-  static verify (swarm: any, conf: AuthPluginOptions) {
+  static verify (_: any, conf: AuthPluginOptions) {
     return async function (request: any) {
       const { message, signature, requestId } = request.body
 

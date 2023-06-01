@@ -49,7 +49,7 @@ export class GoogleAuthenticator {
 
     swarm.controllers.addMethod(
       conf.controllerName,
-      GoogleAuthenticator.validate(swarm, conf),
+      GoogleAuthenticator.validate(),
       {
         method: 'POST',
         route: '/authenticator/validate',
@@ -111,7 +111,7 @@ export class GoogleAuthenticator {
 
     swarm.controllers.addMethod(
       conf.controllerName,
-      GoogleAuthenticator.verify(swarm, conf),
+      GoogleAuthenticator.verify(),
       {
         method: 'POST',
         route: '/authenticator/verify',
@@ -172,7 +172,7 @@ export class GoogleAuthenticator {
 
     swarm.controllers.addMethod(
       conf.controllerName,
-      GoogleAuthenticator.delete(swarm, conf),
+      GoogleAuthenticator.delete(),
       {
         method: 'DELETE',
         route: '/authenticator',
@@ -211,7 +211,7 @@ export class GoogleAuthenticator {
     )
   }
 
-  static add (swarm: any, conf: AuthPluginOptions) {
+  static add (_: any, conf: AuthPluginOptions) {
     return async function (req: any, res: any) {
       if (
         !req.user.swarmGoogleAuthenticatorPending &&
@@ -240,8 +240,8 @@ export class GoogleAuthenticator {
     }
   }
 
-  static validate (swarm: any, conf: AuthPluginOptions) {
-    return async function (req: any, res: any) {
+  static validate () {
+    return async function (req: any) {
       if (
         !req.user.swarmGoogleAuthenticatorPending ||
         !req.user.swarmGoogleAuthenticatorSecret
@@ -253,20 +253,22 @@ export class GoogleAuthenticator {
           req.body.code,
           req.user.swarmGoogleAuthenticatorSecret
         )
-        if (isValid) {
-          req.user.swarmGoogleAuthenticatorPending = false
-          await req.user.save()
-          return {
-            status: true
-          }
-        }
+        if (!isValid) throw new Unauthorized()
+      } catch {
         throw new Unauthorized()
-      } catch {}
+      }
+
+      req.user.swarmGoogleAuthenticatorPending = false
+      await req.user.save()
+
+      return {
+        status: true
+      }
     }
   }
 
-  static verify (swarm: any, conf: AuthPluginOptions) {
-    return async function (req: any, res: any) {
+  static verify () {
+    return async function (req: any) {
       if (
         req.user.swarmGoogleAuthenticatorPending ||
         !req.user.swarmGoogleAuthenticatorSecret
@@ -278,18 +280,19 @@ export class GoogleAuthenticator {
           req.body.code,
           req.user.swarmGoogleAuthenticatorSecret
         )
-        if (isValid)
-          return {
-            status: true
-          }
-
+        if (!isValid) throw new Unauthorized()
+      } catch {
         throw new Unauthorized()
-      } catch {}
+      }
+
+      return {
+        status: true
+      }
     }
   }
 
-  static delete (swarm: any, conf: AuthPluginOptions) {
-    return async function (req: any, res: any) {
+  static delete () {
+    return async function (req: any) {
       if (!req.user.swarmGoogleAuthenticatorSecret) throw new BadRequest()
 
       req.user.swarmGoogleAuthenticatorSecret = ''
