@@ -1,6 +1,26 @@
-import './assets/main.css'
+import './assets/base.css'
 
 import { createApp } from 'vue'
+
+import { createI18n } from 'vue-i18n'
+import enLang from './locales/en.json'
+import frLang from './locales/fr.json'
+
+const i18n = createI18n({
+  legacy: false,
+  fallbackLocale: 'en',
+  locale: navigator.language.split('-')[0],
+  messages: {
+    en: enLang,
+    fr: frLang
+  },
+  missingWarn: false,
+  fallbackWarn: false
+})
+
 import App from './App.vue'
 
-createApp(App).mount('#app')
+const app = createApp(App)
+
+app.use(i18n)
+app.mount('#app')

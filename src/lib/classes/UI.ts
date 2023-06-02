@@ -94,75 +94,54 @@ export class UI {
     )
   }
 
-  static getLoginUI (swarm: any, conf: AuthPluginOptions) {
+  static getLoginUI (_: any, conf: AuthPluginOptions) {
+    return async function () {
+      return await UI.getIndexFile('Login', `login`, conf)
+    }
+  }
+
+  static getRegisterUI (_: any, conf: AuthPluginOptions) {
+    return async function () {
+      return await UI.getIndexFile('Register', `register`, conf)
+    }
+  }
+
+  static getConfirmEmailUI (_: any, conf: AuthPluginOptions) {
     return async function () {
       return await UI.getIndexFile(
-        'Login',
-        `window.AuthPluginConf = ${JSON.stringify({
-          logo: conf.logo,
-          baseUrl: swarm.getOption('baseUrl'),
-          rpName: conf.rpName,
-          password: conf.password,
-          fido2: conf.fido2,
-          facebook: conf.facebook,
-          google: conf.google,
-          googleAuthenticator: conf.googleAuthenticator,
-          ethereum: conf.ethereum
-        })};
-        window.AuthPluginPage = 'login';`
+        'Confirm your email address',
+        `confirm`,
+        conf
       )
     }
   }
 
-  static getRegisterUI (swarm: any, conf: AuthPluginOptions) {
-    return async function () {
-      return await UI.getIndexFile(
-        'Login',
-        `window.AuthPluginConf = ${JSON.stringify({
-          logo: conf.logo,
-          baseUrl: swarm.getOption('baseUrl'),
-          rpName: conf.rpName,
-          password: conf.password,
-          fido2: conf.fido2,
-          facebook: conf.facebook,
-          google: conf.google,
-          googleAuthenticator: conf.googleAuthenticator,
-          ethereum: conf.ethereum
-        })};
-        window.AuthPluginPage = 'register';`
-      )
-    }
-  }
-
-  static getConfirmEmailUI (swarm: any, conf: AuthPluginOptions) {
-    return async function () {
-      return await UI.getIndexFile(
-        'Login',
-        `window.AuthPluginConf = ${JSON.stringify({
-          logo: conf.logo,
-          baseUrl: swarm.getOption('baseUrl'),
-          rpName: conf.rpName,
-          password: conf.password,
-          fido2: conf.fido2,
-          facebook: conf.facebook,
-          google: conf.google,
-          googleAuthenticator: conf.googleAuthenticator,
-          ethereum: conf.ethereum
-        })};
-        window.AuthPluginPage = 'confirm';`
-      )
-    }
-  }
-
-  static async getIndexFile (title: string, code: string) {
+  static async getIndexFile (
+    title: string,
+    page: string,
+    conf: AuthPluginOptions
+  ) {
     const src = (
       await fs.readFile(path.join(__dirname, '../../../front/dist/index.html'))
     ).toString()
-    return src
-      .replace(/\[\[TITLE\]\]/g, title)
-      .replace(
-        /\[\[INIT_CODE\]\]/g,
-        `<script type="text/javascript">${code}</script>`
-      )
+
+    return src.replace(/\[\[TITLE\]\]/g, title).replace(
+      /\[\[INIT_CODE\]\]/g,
+      `<script type="text/javascript">
+          window.AuthPluginConf = ${JSON.stringify({
+            logo: conf.logo,
+            themeColor: conf.themeColor,
+            prefix: conf.prefix,
+            rpName: conf.rpName,
+            password: conf.password,
+            fido2: conf.fido2,
+            facebook: conf.facebook,
+            google: conf.google,
+            googleAuthenticator: conf.googleAuthenticator,
+            ethereum: conf.ethereum
+          })};
+          window.AuthPluginPage = '${page}';
+        </script>`
+    )
   }
 }

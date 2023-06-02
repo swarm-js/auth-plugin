@@ -22,6 +22,7 @@ export default class AuthPlugin {
       model: null,
       validationRequired: false,
       logo: null,
+      themeColor: '#8500d2',
       rpName: null,
       rpId: null,
       origin: null,
@@ -78,7 +79,8 @@ export default class AuthPlugin {
     instance.controllers.addController(conf.controllerName, {
       title: 'Auth',
       description: 'Handles auth with various methods',
-      prefix: conf.prefix
+      prefix: conf.prefix,
+      root: true
     })
 
     UI.setup(swarm, conf)

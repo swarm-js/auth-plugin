@@ -1,0 +1,22 @@
+{
+  "login": {
+    "title": "Connexion",
+    "email": "Adresse e-mail",
+    "password": "Mot de passe",
+    "button": "Connexion",
+    "or": "Ou se connecter avec",
+    "ethereumWallet": "Portefeuille Ethereum",
+    "errors": {
+      "noRedirect": "Aucune URL de redirection à été configurée, merci de contacter votre administrateur."
+    }
+  },
+  "register": {
+    "title": "Inscription"
+  },
+  "confirm": {
+    "title": "Confirmer"
+  },
+  "error": {
+    "title": "Une erreur est survenue"
+  }
+}

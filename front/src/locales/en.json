@@ -1,0 +1,22 @@
+{
+  "login": {
+    "title": "Login",
+    "email": "Email address",
+    "password": "Password",
+    "button": "Login",
+    "or": "Or login with",
+    "ethereumWallet": "Ethereum Wallet",
+    "errors": {
+      "noRedirect": "No redirect URL has been configured, please contact your administrator."
+    }
+  },
+  "register": {
+    "title": "Sign up"
+  },
+  "confirm": {
+    "title": "Confirm"
+  },
+  "error": {
+    "title": "An error has occured"
+  }
+}
