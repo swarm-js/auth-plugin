@@ -186,53 +186,6 @@ export class Password {
         ]
       }
     )
-
-    swarm.controllers.addMethod(
-      conf.controllerName,
-      Password.confirmEmail(swarm, conf),
-      {
-        method: 'POST',
-        route: '/confirm-email',
-        title: 'Confirm email',
-        accepts: {
-          type: 'object',
-          properties: {
-            code: {
-              type: 'string'
-            }
-          },
-          required: ['code']
-        },
-        returns: [
-          {
-            code: 200,
-            description: 'Email correctly validated',
-            mimeType: 'application/json',
-            schema: {
-              type: 'object',
-              properties: {
-                status: { type: 'boolean' }
-              }
-            }
-          },
-          {
-            code: 403,
-            description: 'Wrong code',
-            mimeType: 'application/json',
-            schema: {
-              type: 'object',
-              properties: {
-                statusCode: { type: 'number' },
-                code: { type: 'string' },
-                error: { type: 'string' },
-                message: { type: 'string' },
-                time: { type: 'string' }
-              }
-            }
-          }
-        ]
-      }
-    )
   }
 
   static register (swarm: any, conf: AuthPluginOptions) {
@@ -342,21 +295,6 @@ export class Password {
         return { status: true }
       } catch {
         throw new Unauthorized()
-      }
-    }
-  }
-
-  static confirmEmail (_: any, conf: AuthPluginOptions) {
-    return async function (request: any) {
-      const user = await conf.model.findOne({
-        swarmValidationCode: request.body.code
-      })
-      if (!user) throw new Unauthorized()
-      user.swarmValidationCode = ''
-      user.swarmValidated = true
-      await user.save()
-      return {
-        status: true
       }
     }
   }

@@ -5,18 +5,33 @@
     "password": "Password",
     "button": "Login",
     "or": "Or login with",
+    "ok": "OK",
     "ethereumWallet": "Ethereum Wallet",
+    "registerPrompt": "Don't have an account ?",
+    "registerButton": "Register",
+    "forgotPrompt": "Forgot your password ?",
+    "forgotButton": "Retrieve your password",
+    "askTotpTitle": "Verify your identity",
+    "askTotpDesc": "Please open Google Authenticator and write down the displayed code for your account.",
+    "totpError": "The submitted code is not valid.",
+    "cancel": "Cancel",
     "errors": {
-      "noRedirect": "No redirect URL has been configured, please contact your administrator."
+      "noRedirect": "No redirect URL has been configured, please contact your administrator.",
+      "nonAllowedRedirect": "The supplied redirect URL is not allowed, please contact your administrator."
     }
   },
   "register": {
     "title": "Sign up"
   },
-  "confirm": {
-    "title": "Confirm"
+  "emailConfirmed": "Your account has been validated. You can now log in.",
+  "emailNotConfirmed": "This validation link is not valid, or your account has already been validated.",
+  "forgot": {
+    "title": "Forgotten password"
   },
   "error": {
-    "title": "An error has occured"
+    "title": "An error has occured",
+    "ethereum": "An error occured within the Ethereum wallet login",
+    "login": "An error occured within the login",
+    "validationRequired": "You have to validate your email address before access your account"
   }
 }

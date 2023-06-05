@@ -68,17 +68,18 @@
 </template>
 
 <script setup>
+import { useI18n } from 'vue-i18n'
 import { ethers } from 'ethers'
 import { SiweMessage } from 'siwe'
 import { useApi } from '../composables/useApi'
+
+const { t: $t } = useI18n()
+const emit = defineEmits(['error'])
 
 const { redirect, conf } = defineProps({
   redirect: {},
   conf: {}
 })
-
-let error = false
-let errorMsg = ''
 
 const api = useApi(conf.prefix)
 
@@ -95,56 +96,59 @@ function loginWithGoogle () {
 }
 
 async function loginWithEthereum () {
-  const domain = window.location.host
-  const origin = window.location.origin
-  let signer = null
-  let provider
-  if (window.ethereum === null) provider = ethers.getDefaultProvider()
-  else {
-    provider = new ethers.BrowserProvider(window.ethereum)
-    signer = await provider.getSigner()
-  }
+  try {
+    const domain = window.location.host
+    const origin = window.location.origin
+    let signer = null
+    let provider
+    if (window.ethereum === null) provider = ethers.getDefaultProvider()
+    else {
+      provider = new ethers.BrowserProvider(window.ethereum)
+      signer = await provider.getSigner()
+    }
 
-  // Connect wallet
-  provider.send('eth_requestAccounts', [])
+    // Connect wallet
+    provider.send('eth_requestAccounts', [])
 
-  // Create message
-  const statement = 'Sign in with Ethereum to the app.'
-  const address = await signer.getAddress()
-  const { nonce, requestId } = await api.get('/ethereum/nonce')
+    // Create message
+    const statement = 'Sign in with Ethereum to the app.'
+    const address = await signer.getAddress()
+    const { nonce, requestId } = await api.get('/ethereum/nonce')
 
-  let message = new SiweMessage({
-    domain,
-    address,
-    statement,
-    uri: origin,
-    version: '1',
-    chainId: '1',
-    nonce
-  })
-  message = message.prepareMessage()
+    let message = new SiweMessage({
+      domain,
+      address,
+      statement,
+      uri: origin,
+      version: '1',
+      chainId: '1',
+      nonce
+    })
+    message = message.prepareMessage()
 
-  // Sign message
-  const signature = await signer.signMessage(message)
+    // Sign message
+    const signature = await signer.signMessage(message)
 
-  // Get JWT
-  const {
-    token,
-    error: err,
-    message: errMsg
-  } = await api.post('/ethereum/verify', {
-    message,
-    signature,
-    requestId
-  })
+    // Get JWT
+    const {
+      token,
+      error: err,
+      message: errMsg
+    } = await api.post('/ethereum/verify', {
+      message,
+      signature,
+      requestId
+    })
 
-  if (err) {
-    errorMsg = errMsg
-    error = true
-  } else {
-    const url = new URL(redirect)
-    url.searchParams.set('token', token)
-    window.location.href = url.toString()
+    if (err) {
+      emit('error', errMsg)
+    } else {
+      const url = new URL(redirect)
+      url.searchParams.set('token', token)
+      window.location.href = url.toString()
+    }
+  } catch {
+    emit('error', $t('error.ethereum'))
   }
 }
 </script>

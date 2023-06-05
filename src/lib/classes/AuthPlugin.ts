@@ -43,6 +43,7 @@ export default class AuthPlugin {
       facebookClientId: '',
       facebookClientSecret: '',
       facebookRedirect: '',
+      allowedDomains: [],
       ...options
     }
 

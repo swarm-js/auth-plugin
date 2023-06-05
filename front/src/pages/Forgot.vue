@@ -1,6 +1,6 @@
 <template>
-  <div class="confirm">
-    <h1>{{ $t('confirm.title') }}</h1>
+  <div class="forgot">
+    <h1>{{ $t('forgot.title') }}</h1>
   </div>
 </template>
 
@@ -11,6 +11,6 @@ const { conf } = defineProps({
 </script>
 
 <style lang="scss">
-.confirm {
+.forgot {
 }
 </style>

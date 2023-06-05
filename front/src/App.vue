@@ -3,7 +3,9 @@ import Color from 'color'
 import { useStyleTag } from '@vueuse/core'
 import PageLogin from './pages/Login.vue'
 import PageRegister from './pages/Register.vue'
-import PageConfirm from './pages/Confirm.vue'
+import PageEmailConfirmed from './pages/EmailConfirmed.vue'
+import PageEmailNotConfirmed from './pages/EmailNotConfirmed.vue'
+import PageForgot from './pages/Forgot.vue'
 
 declare global {
   interface Window {
@@ -51,7 +53,9 @@ const page = window.AuthPluginPage ?? 'login'
       ></div>
       <PageLogin v-if="page === 'login'" :conf="conf" />
       <PageRegister v-if="page === 'register'" :conf="conf" />
-      <PageConfirm v-if="page === 'confirm'" :conf="conf" />
+      <PageEmailConfirmed v-if="page === 'emailConfirmed'" :conf="conf" />
+      <PageEmailNotConfirmed v-if="page === 'emailNotConfirmed'" :conf="conf" />
+      <PageForgot v-if="page === 'forgot'" :conf="conf" />
     </div>
   </main>
 </template>
@@ -99,6 +103,13 @@ const page = window.AuthPluginPage ?? 'login'
         line-height: 1.2;
         text-transform: uppercase;
         margin-bottom: 20px;
+      }
+
+      .loading {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100%;
       }
     }
   }

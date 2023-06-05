@@ -1,6 +1,7 @@
 import { AuthPluginOptions } from '../interfaces/AuthPluginOptions'
 import path from 'path'
 import fs from 'fs/promises'
+import { Unauthorized } from 'http-errors'
 
 export class UI {
   static setup (swarm: any, conf: AuthPluginOptions) {
@@ -79,7 +80,39 @@ export class UI {
       {
         method: 'GET',
         route: '/confirm-email',
-        title: 'Displays an UI to confirm an email',
+        title: 'Email confirmation link',
+        query: [
+          {
+            name: 'redirect',
+            schema: { type: 'string', format: 'uri' },
+            description: 'Redirection URI'
+          },
+          {
+            name: 'code',
+            schema: { type: 'string', format: 'uuid' },
+            description: 'Validation code'
+          }
+        ],
+        returns: [
+          {
+            code: 200,
+            description: 'HTML page',
+            mimeType: 'text/html',
+            schema: {
+              type: 'string'
+            }
+          }
+        ]
+      }
+    )
+
+    swarm.controllers.addMethod(
+      conf.controllerName,
+      UI.getForgotUI(swarm, conf),
+      {
+        method: 'GET',
+        route: '/forgot-password',
+        title: 'Displays an UI to retrieve an email',
         returns: [
           {
             code: 200,
@@ -107,12 +140,45 @@ export class UI {
   }
 
   static getConfirmEmailUI (_: any, conf: AuthPluginOptions) {
-    return async function () {
+    return async function (request: any) {
+      try {
+        const domain = new URL(request.query.redirect).host
+        if (
+          (conf.allowedDomains ?? []).length &&
+          (conf.allowedDomains ?? []).includes(domain) === false
+        )
+          throw new Error('Domain not allowed')
+      } catch {
+        return await UI.getIndexFile(
+          'Email validation error',
+          `emailNotConfirmed`,
+          conf
+        )
+      }
+
+      const user = await conf.model.findOne({
+        swarmValidationCode: request.query.code
+      })
+      if (!user)
+        return await UI.getIndexFile(
+          'Email validation error',
+          `emailNotConfirmed`,
+          conf
+        )
+      user.swarmValidationCode = ''
+      user.swarmValidated = true
+      await user.save()
       return await UI.getIndexFile(
-        'Confirm your email address',
-        `confirm`,
+        'Email address confirmed',
+        `emailConfirmed`,
         conf
       )
+    }
+  }
+
+  static getForgotUI (_: any, conf: AuthPluginOptions) {
+    return async function () {
+      return await UI.getIndexFile('Retrieve your password', `forgot`, conf)
     }
   }
 
@@ -138,7 +204,8 @@ export class UI {
             facebook: conf.facebook,
             google: conf.google,
             googleAuthenticator: conf.googleAuthenticator,
-            ethereum: conf.ethereum
+            ethereum: conf.ethereum,
+            allowedDomains: conf.allowedDomains
           })};
           window.AuthPluginPage = '${page}';
         </script>`

@@ -5,18 +5,33 @@
     "password": "Mot de passe",
     "button": "Connexion",
     "or": "Ou se connecter avec",
+    "ok": "OK",
     "ethereumWallet": "Portefeuille Ethereum",
+    "registerPrompt": "Pas encore de compte ?",
+    "registerButton": "Inscrivez-vous",
+    "forgotPrompt": "Vous avez oublié votre mot de passe ?",
+    "forgotButton": "Récupération de mot de passe",
+    "askTotpTitle": "Vérifiez votre identité",
+    "askTotpDesc": "Veuillez ouvrir Google Authenticator et écrivez ci-dessous le code affiché pour votre compte.",
+    "totpError": "Le code saisi n'est pas valide.",
+    "cancel": "Annuler",
     "errors": {
-      "noRedirect": "Aucune URL de redirection à été configurée, merci de contacter votre administrateur."
+      "noRedirect": "Aucune URL de redirection à été configurée, merci de contacter votre administrateur.",
+      "nonAllowedRedirect": "L'URL de redirection fournie n'est pas autorisée, merci de contacter votre administrateur."
     }
   },
   "register": {
     "title": "Inscription"
   },
-  "confirm": {
-    "title": "Confirmer"
+  "emailConfirmed": "Votre compte à été validé. Vous pouvez désormais vous connecter.",
+  "emailNotConfirmed": "Ce lien de validation n'est pas valide, ou votre compte à déjà été validé.",
+  "forgot": {
+    "title": "Mot de passe oublié"
   },
   "error": {
-    "title": "Une erreur est survenue"
+    "title": "Une erreur est survenue",
+    "ethereum": "Une erreur est survenue pendant la connexion au portefeuille Ethereum",
+    "login": "Une erreur est survenue pendant la connexion",
+    "validationRequired": "Vous devez valider votre adresse email avant d'accéder à votre compte"
   }
 }

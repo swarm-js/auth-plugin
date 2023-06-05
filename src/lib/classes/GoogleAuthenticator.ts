@@ -2,6 +2,7 @@ import { AuthPluginOptions } from '../interfaces/AuthPluginOptions'
 import { authenticator } from 'otplib'
 import { BadRequest, Unauthorized } from 'http-errors'
 import qrcode from 'qrcode'
+import { JWT } from './JWT'
 
 export class GoogleAuthenticator {
   static setup (swarm: any, conf: AuthPluginOptions) {
@@ -111,7 +112,7 @@ export class GoogleAuthenticator {
 
     swarm.controllers.addMethod(
       conf.controllerName,
-      GoogleAuthenticator.verify(),
+      GoogleAuthenticator.verify(swarm, conf),
       {
         method: 'POST',
         route: '/authenticator/verify',
@@ -126,12 +127,13 @@ export class GoogleAuthenticator {
         returns: [
           {
             code: 200,
-            description: 'The code is valid',
+            description: 'The code is valid, and a new token is issued',
             mimeType: 'application/json',
             schema: {
               type: 'object',
               properties: {
-                status: { type: 'boolean' }
+                status: { type: 'boolean' },
+                token: { type: 'string' }
               }
             }
           },
@@ -267,7 +269,7 @@ export class GoogleAuthenticator {
     }
   }
 
-  static verify () {
+  static verify (_: any, conf: AuthPluginOptions) {
     return async function (req: any) {
       if (
         req.user.swarmGoogleAuthenticatorPending ||
@@ -286,7 +288,8 @@ export class GoogleAuthenticator {
       }
 
       return {
-        status: true
+        status: true,
+        token: JWT.generate(conf, req.user, false, !req.user.swarmValidated)
       }
     }
   }
