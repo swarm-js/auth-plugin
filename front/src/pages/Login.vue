@@ -47,7 +47,7 @@
     </button>
     <div class="more" style="text-align: center">
       <a href="#" @click.native.prevent="cancelNewTotp">
-        {{ $t('login.cancel') }}
+        {{ $t('login.noThanks') }}
       </a>
     </div>
   </div>
@@ -375,6 +375,13 @@ async function tryLogin () {
       text-transform: uppercase;
       margin: 0 15px;
     }
+  }
+
+  img {
+    display: block;
+    margin: 20px auto;
+    width: 200px;
+    height: 200px;
   }
 }
 </style>

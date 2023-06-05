@@ -15,6 +15,9 @@
     "askTotpDesc": "Please open Google Authenticator and write down the displayed code for your account.",
     "totpError": "The submitted code is not valid.",
     "cancel": "Cancel",
+    "noThanks": "No thanks",
+    "proposeTotpTitle": "Protect your account",
+    "proposeTotpDesc": "You can add a two factor authentication with Google Authenticator to protect your account. Open your Google Authenticator app, scan the QRCode below and write down the displayed 6-digits code.",
     "errors": {
       "noRedirect": "No redirect URL has been configured, please contact your administrator.",
       "nonAllowedRedirect": "The supplied redirect URL is not allowed, please contact your administrator."
