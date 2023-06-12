@@ -1,6 +1,6 @@
 import { AuthPluginOptions } from '../interfaces/AuthPluginOptions'
 import { v4 as uuid } from 'uuid'
-import { BadRequest } from 'http-errors'
+import { BadRequest, Unauthorized } from 'http-errors'
 import { JWT } from './JWT'
 import { verifyMessage } from 'ethers'
 
@@ -81,9 +81,9 @@ export class Ethereum {
 
   static verify (_: any, conf: AuthPluginOptions) {
     return async function verify (request: any) {
-      const { signature, requestId } = request.body
+      const { signature, address, requestId } = request.body
 
-      if (!signature || nonces[requestId] === undefined) {
+      if (!signature || !address || nonces[requestId] === undefined) {
         throw new BadRequest()
       }
 
@@ -92,9 +92,12 @@ export class Ethereum {
 Nonce: ${nonces[requestId]}
 Request ID : ${requestId}`
 
-      const address = verifyMessage(expectedMessage, signature)
+      const signerAddress = verifyMessage(expectedMessage, signature)
 
       delete nonces[requestId]
+
+      if (signerAddress.toLowerCase() !== address.toLowerCase())
+        throw new Unauthorized()
 
       let user = await conf.model.findOne({
         swarmEthereumWallet: address
@@ -107,7 +110,7 @@ Request ID : ${requestId}`
       }
 
       user = await conf.model.create({
-        swarmEthereumWallet: address
+        swarmEthereumWallet: address.toLowerCase()
       })
 
       return {

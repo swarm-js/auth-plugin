@@ -104,10 +104,6 @@ function loginWithGoogle() {
 
 async function loginWithEthereum() {
   try {
-    const domain = window.location.host
-    const origin = window.location.origin
-    let signer = null
-
     if (window.ethereum === null) emit('error', $t('error.ethereum'))
 
     // Connect wallet
@@ -136,6 +132,7 @@ Request ID : ${requestId}`,
       message: errMsg
     } = await api.post('/ethereum/verify', {
       signature: walletResp,
+      address: addresses[0],
       requestId
     })
 
