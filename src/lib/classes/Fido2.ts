@@ -242,7 +242,7 @@ export class Fido2 {
   }
 
   static fido2Init (_: any, conf: AuthPluginOptions) {
-    return async function (request: any) {
+    return async function fido2Init (request: any) {
       const registrationOptions = await fido.attestationOptions()
 
       const id = uuid()
@@ -267,7 +267,7 @@ export class Fido2 {
   }
 
   static fido2Register (_: any, conf: AuthPluginOptions) {
-    return async function (request: any) {
+    return async function fido2Register (request: any) {
       const { credential } = request.body
 
       const _this = request.user.swarmFido2Credentials.find(
@@ -319,7 +319,7 @@ export class Fido2 {
   }
 
   static fido2AuthOptions () {
-    return async function (request: any) {
+    return async function fido2AuthOptions (request: any) {
       const authnOptions = await fido.assertionOptions()
 
       request.user.swarmFido2Credentials =
@@ -339,7 +339,7 @@ export class Fido2 {
   }
 
   static fido2Authenticate (_: any, conf: AuthPluginOptions) {
-    return async function (request: any) {
+    return async function fido2Authenticate (request: any) {
       const { credential } = request.body
 
       const _this = request.user.swarmFido2Credentials.find(
@@ -376,7 +376,7 @@ export class Fido2 {
   }
 
   static fido2Login (_: any, conf: AuthPluginOptions) {
-    return async function (request: any) {
+    return async function fido2Login (request: any) {
       const user = await conf.model.findOne({
         'swarmFido2Credentials.id': request.params.id
       })

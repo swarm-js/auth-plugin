@@ -1,8 +1,8 @@
 import { AuthPluginOptions } from '../interfaces/AuthPluginOptions'
-import { generateNonce, SiweMessage } from 'siwe'
 import { v4 as uuid } from 'uuid'
 import { BadRequest } from 'http-errors'
 import { JWT } from './JWT'
+import { verifyMessage } from 'ethers'
 
 let nonces: any = {}
 
@@ -70,9 +70,9 @@ export class Ethereum {
   }
 
   static nonce () {
-    return async function () {
+    return async function nonce () {
       const requestId: string = uuid()
-      const nonce: string = generateNonce()
+      const nonce: string = uuid()
       nonces[requestId] = nonce
 
       return { requestId, nonce }
@@ -80,22 +80,24 @@ export class Ethereum {
   }
 
   static verify (_: any, conf: AuthPluginOptions) {
-    return async function (request: any) {
-      const { message, signature, requestId } = request.body
+    return async function verify (request: any) {
+      const { signature, requestId } = request.body
 
-      if (!message || !signature) {
+      if (!signature || nonces[requestId] === undefined) {
         throw new BadRequest()
       }
 
-      let siweObj = new SiweMessage(message)
-      const { data } = await siweObj.verify({
-        signature,
-        nonce: nonces[requestId]
-      })
+      const expectedMessage = `Please log in to ${conf.rpName}.
+
+Nonce: ${nonces[requestId]}
+Request ID : ${requestId}`
+
+      const address = verifyMessage(expectedMessage, signature)
+
       delete nonces[requestId]
 
       let user = await conf.model.findOne({
-        swarmEthereumWallet: data.address
+        swarmEthereumWallet: address
       })
 
       if (user) {
@@ -105,7 +107,7 @@ export class Ethereum {
       }
 
       user = await conf.model.create({
-        swarmEthereumWallet: data.address
+        swarmEthereumWallet: address
       })
 
       return {

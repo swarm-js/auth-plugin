@@ -106,7 +106,7 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { useI18n } from 'vue-i18n'
 import fontColorContrast from 'font-color-contrast'
 import { reactive, computed, ref } from 'vue'
@@ -131,7 +131,7 @@ let loginError = ref(false)
 let loginErrorMessage = ref('')
 let loading = ref(true)
 let askTotpOpened = ref(false)
-let proposeTotpOpened = ref(true)
+let proposeTotpOpened = ref(false)
 let totpCode = ref('')
 let totpError = ref(false)
 let totpToken = ref('')

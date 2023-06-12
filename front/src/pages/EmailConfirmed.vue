@@ -13,7 +13,7 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import fontColorContrast from 'font-color-contrast'
 const { conf } = defineProps({
   conf: {}

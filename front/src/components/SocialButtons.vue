@@ -67,67 +67,67 @@
   </button>
 </template>
 
-<script setup>
+<script setup lang="ts">
+declare global {
+  interface Window {
+    ethereum: any
+  }
+}
+
 import { useI18n } from 'vue-i18n'
-import { ethers } from 'ethers'
-import { SiweMessage } from 'siwe'
 import { useApi } from '../composables/useApi'
 
 const { t: $t } = useI18n()
 const emit = defineEmits(['error'])
 
-const { redirect, conf } = defineProps({
-  redirect: {},
+const props: any = defineProps({
+  redirect: String,
   conf: {}
 })
 
+const redirect: string = props.redirect
+const conf: any = props.conf
+
 const api = useApi(conf.prefix)
 
-function loginWithFacebook () {
+function loginWithFacebook() {
   window.location.href = `${
     conf.prefix
   }/social/facebook/init?redirect=${encodeURIComponent(redirect)}`
 }
 
-function loginWithGoogle () {
+function loginWithGoogle() {
   window.location.href = `${
     conf.prefix
   }/social/google/init?redirect=${encodeURIComponent(redirect)}`
 }
 
-async function loginWithEthereum () {
+async function loginWithEthereum() {
   try {
     const domain = window.location.host
     const origin = window.location.origin
     let signer = null
-    let provider
-    if (window.ethereum === null) provider = ethers.getDefaultProvider()
-    else {
-      provider = new ethers.BrowserProvider(window.ethereum)
-      signer = await provider.getSigner()
-    }
+
+    if (window.ethereum === null) emit('error', $t('error.ethereum'))
 
     // Connect wallet
-    provider.send('eth_requestAccounts', [])
-
-    // Create message
-    const statement = 'Sign in with Ethereum to the app.'
-    const address = await signer.getAddress()
-    const { nonce, requestId } = await api.get('/ethereum/nonce')
-
-    let message = new SiweMessage({
-      domain,
-      address,
-      statement,
-      uri: origin,
-      version: '1',
-      chainId: '1',
-      nonce
+    const addresses = await window.ethereum.request({
+      method: 'eth_requestAccounts'
     })
-    message = message.prepareMessage()
 
     // Sign message
-    const signature = await signer.signMessage(message)
+    const { nonce, requestId } = await api.get('/ethereum/nonce')
+    const walletResp = await window.ethereum.request({
+      method: 'personal_sign',
+      params: [
+        `Please log in to ${conf.rpName}.
+
+Nonce: ${nonce}
+Request ID : ${requestId}`,
+        addresses[0],
+        ''
+      ]
+    })
 
     // Get JWT
     const {
@@ -135,8 +135,7 @@ async function loginWithEthereum () {
       error: err,
       message: errMsg
     } = await api.post('/ethereum/verify', {
-      message,
-      signature,
+      signature: walletResp,
       requestId
     })
 

@@ -25,7 +25,7 @@ export class GoogleAuthenticator {
             schema: {
               type: 'object',
               properties: {
-                qrcode: 'string'
+                qrcode: { type: 'string' }
               }
             }
           },
@@ -214,7 +214,7 @@ export class GoogleAuthenticator {
   }
 
   static add (_: any, conf: AuthPluginOptions) {
-    return async function (req: any, res: any) {
+    return async function add (req: any, res: any) {
       if (
         !req.user.swarmGoogleAuthenticatorPending &&
         req.user.swarmGoogleAuthenticatorSecret
@@ -243,7 +243,7 @@ export class GoogleAuthenticator {
   }
 
   static validate () {
-    return async function (req: any) {
+    return async function validate (req: any) {
       if (
         !req.user.swarmGoogleAuthenticatorPending ||
         !req.user.swarmGoogleAuthenticatorSecret
@@ -270,7 +270,7 @@ export class GoogleAuthenticator {
   }
 
   static verify (_: any, conf: AuthPluginOptions) {
-    return async function (req: any) {
+    return async function verify (req: any) {
       if (
         req.user.swarmGoogleAuthenticatorPending ||
         !req.user.swarmGoogleAuthenticatorSecret
@@ -295,7 +295,7 @@ export class GoogleAuthenticator {
   }
 
   static delete () {
-    return async function (req: any) {
+    return async function deleteAuthenticator (req: any) {
       if (!req.user.swarmGoogleAuthenticatorSecret) throw new BadRequest()
 
       req.user.swarmGoogleAuthenticatorSecret = ''

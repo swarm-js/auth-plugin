@@ -11,7 +11,7 @@ import { UI } from './UI'
 let swarm: any
 let conf: AuthPluginOptions
 
-export default class AuthPlugin {
+export class AuthPlugin {
   static setup (instance: any, options: Partial<AuthPluginOptions> = {}) {
     swarm = instance
 

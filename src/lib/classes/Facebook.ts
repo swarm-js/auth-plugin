@@ -48,7 +48,7 @@ export class Facebook {
   }
 
   static init (_: any, conf: AuthPluginOptions) {
-    return async function (request: any, reply: any) {
+    return async function init (request: any, reply: any) {
       const driver = new FacebookProvider()
       const url = await driver.getRedirectUri(conf, request.query.redirect)
 
@@ -61,7 +61,7 @@ export class Facebook {
   }
 
   static callback (_: any, conf: AuthPluginOptions) {
-    return async function (request: any, reply: any) {
+    return async function callback (request: any, reply: any) {
       const driver = new FacebookProvider()
       const ret = await driver.callback(conf, request.query)
 

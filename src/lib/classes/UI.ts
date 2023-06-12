@@ -1,7 +1,6 @@
 import { AuthPluginOptions } from '../interfaces/AuthPluginOptions'
 import path from 'path'
 import fs from 'fs/promises'
-import { Unauthorized } from 'http-errors'
 
 export class UI {
   static setup (swarm: any, conf: AuthPluginOptions) {
@@ -128,19 +127,21 @@ export class UI {
   }
 
   static getLoginUI (_: any, conf: AuthPluginOptions) {
-    return async function () {
+    return async function getLoginUI (_: any, reply: any) {
+      reply.header('Content-Type', 'text/html')
       return await UI.getIndexFile('Login', `login`, conf)
     }
   }
 
   static getRegisterUI (_: any, conf: AuthPluginOptions) {
-    return async function () {
+    return async function getRegisterUI (_: any, reply: any) {
+      reply.header('Content-Type', 'text/html')
       return await UI.getIndexFile('Register', `register`, conf)
     }
   }
 
   static getConfirmEmailUI (_: any, conf: AuthPluginOptions) {
-    return async function (request: any) {
+    return async function getConfirmEmailUI (request: any, reply: any) {
       try {
         const domain = new URL(request.query.redirect).host
         if (
@@ -149,6 +150,7 @@ export class UI {
         )
           throw new Error('Domain not allowed')
       } catch {
+        reply.header('Content-Type', 'text/html')
         return await UI.getIndexFile(
           'Email validation error',
           `emailNotConfirmed`,
@@ -159,15 +161,18 @@ export class UI {
       const user = await conf.model.findOne({
         swarmValidationCode: request.query.code
       })
-      if (!user)
+      if (!user) {
+        reply.header('Content-Type', 'text/html')
         return await UI.getIndexFile(
           'Email validation error',
           `emailNotConfirmed`,
           conf
         )
+      }
       user.swarmValidationCode = ''
       user.swarmValidated = true
       await user.save()
+      reply.header('Content-Type', 'text/html')
       return await UI.getIndexFile(
         'Email address confirmed',
         `emailConfirmed`,
@@ -177,7 +182,8 @@ export class UI {
   }
 
   static getForgotUI (_: any, conf: AuthPluginOptions) {
-    return async function () {
+    return async function getForgotUI (_: any, reply: any) {
+      reply.header('Content-Type', 'text/html')
       return await UI.getIndexFile('Retrieve your password', `forgot`, conf)
     }
   }
@@ -191,9 +197,11 @@ export class UI {
       await fs.readFile(path.join(__dirname, '../../../front/dist/index.html'))
     ).toString()
 
-    return src.replace(/\[\[TITLE\]\]/g, title).replace(
-      /\[\[INIT_CODE\]\]/g,
-      `<script type="text/javascript">
+    return src
+      .replace(/\[\[TITLE\]\]/g, title)
+      .replace(
+        /\[\[INIT_CODE\]\]/g,
+        `<script type="text/javascript">
           window.AuthPluginConf = ${JSON.stringify({
             logo: conf.logo,
             themeColor: conf.themeColor,
@@ -209,6 +217,7 @@ export class UI {
           })};
           window.AuthPluginPage = '${page}';
         </script>`
-    )
+      )
+      .replace(/(href|src)="/g, '$1="/auth-plugin-static')
   }
 }

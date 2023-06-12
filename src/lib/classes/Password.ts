@@ -189,7 +189,7 @@ export class Password {
   }
 
   static register (swarm: any, conf: AuthPluginOptions) {
-    return async function (request: any) {
+    return async function register (request: any) {
       const existing = await conf.model.findOne({
         [conf.emailField]: request.body.email
       })
@@ -244,7 +244,7 @@ export class Password {
   }
 
   static login (_: any, conf: AuthPluginOptions) {
-    return async function (request: any) {
+    return async function login (request: any) {
       const user = await conf.model.findOne({
         [conf.emailField]: request.body.email
       })
@@ -281,7 +281,7 @@ export class Password {
   }
 
   static changePassword () {
-    return async function (request: any) {
+    return async function changePassword (request: any) {
       try {
         const passwordValid = await Crypt.verify(
           request.body.oldPassword,
