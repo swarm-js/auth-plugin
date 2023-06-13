@@ -2,10 +2,21 @@ import { AuthPluginOptions } from '../interfaces/AuthPluginOptions'
 import { FacebookProvider } from '../providers/Facebook'
 import { JWT } from './JWT'
 import qs from 'qs'
+import { joinUrl } from './utils'
 
 export class Facebook {
   static setup (swarm: any, conf: AuthPluginOptions) {
     if (!conf.facebook) return
+
+    if (conf.facebookRedirect === '')
+      conf.facebookRedirect =
+        joinUrl(
+          swarm.getOption('baseUrl'),
+          conf.prefix,
+          'social/facebook/callback'
+        ) ?? ''
+    if (conf.facebookRedirect === '')
+      throw new Error('Facebook redirect URL must be configured')
 
     swarm.controllers.addMethod(
       conf.controllerName,

@@ -34,7 +34,8 @@ const User = mongoose.model<IUser>('User', userSchema)
 const app = new Swarm({
   logLevel: 'info',
   title: 'My API',
-  description: 'A super API made with SwarmJS'
+  description: 'A super API made with SwarmJS',
+  baseUrl: 'http://127.0.0.1:8080'
 })
 
 app.use(AuthPlugin, {
@@ -45,10 +46,13 @@ app.use(AuthPlugin, {
   googleAuthenticator: true,
   ethereum: true,
   model: User,
-  rpId: 'localhost',
   rpName: 'SwarmJS Auth plugin test app',
-  origin: 'localhost:8080',
-  logo: 'https://www.gitbook.com/cdn-cgi/image/width=40,dpr=2,height=40,fit=contain,format=auto/https%3A%2F%2F3423608392-files.gitbook.io%2F~%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252FeEVq5YDGaSKNtIJG7WcF%252Ficon%252F4XDY5BBrhcqwMH6XFO06%252Flogo.png%3Falt%3Dmedia%26token%3D017a73c1-adc8-48d7-8807-bf496703eb6a'
+  logo: 'https://www.gitbook.com/cdn-cgi/image/width=40,dpr=2,height=40,fit=contain,format=auto/https%3A%2F%2F3423608392-files.gitbook.io%2F~%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252FeEVq5YDGaSKNtIJG7WcF%252Ficon%252F4XDY5BBrhcqwMH6XFO06%252Flogo.png%3Falt%3Dmedia%26token%3D017a73c1-adc8-48d7-8807-bf496703eb6a',
+  googleClientId:
+    '468474862806-q2ib0054o8c8noovskksvf96d5aqjhsq.apps.googleusercontent.com',
+  googleClientSecret: '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',
+  facebookClientId: '496580118508802',
+  facebookClientSecret: 'fa5d4c5cbb952b086661e7a825edc2c7'
 } as AuthPluginOptions)
 
 async function main () {

@@ -2,10 +2,21 @@ import { AuthPluginOptions } from '../interfaces/AuthPluginOptions'
 import { GoogleProvider } from '../providers/Google'
 import { JWT } from './JWT'
 import qs from 'qs'
+import { joinUrl } from './utils'
 
 export class Google {
   static setup (swarm: any, conf: AuthPluginOptions) {
     if (!conf.google) return
+
+    if (conf.googleRedirect === '')
+      conf.googleRedirect =
+        joinUrl(
+          swarm.getOption('baseUrl'),
+          conf.prefix,
+          'social/google/callback'
+        ) ?? ''
+    if (conf.googleRedirect === '')
+      throw new Error('Google redirect URL must be configured')
 
     swarm.controllers.addMethod(conf.controllerName, Google.init(swarm, conf), {
       method: 'GET',
