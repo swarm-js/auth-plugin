@@ -93,13 +93,13 @@ const api = useApi(conf.prefix)
 function loginWithFacebook() {
   window.location.href = `${
     conf.prefix
-  }/social/facebook/init?redirect=${encodeURIComponent(redirect)}`
+  }/social/facebook?redirect=${encodeURIComponent(redirect)}`
 }
 
 function loginWithGoogle() {
   window.location.href = `${
     conf.prefix
-  }/social/google/init?redirect=${encodeURIComponent(redirect)}`
+  }/social/google?redirect=${encodeURIComponent(redirect)}`
 }
 
 async function loginWithEthereum() {

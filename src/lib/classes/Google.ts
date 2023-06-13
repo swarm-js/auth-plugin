@@ -44,7 +44,7 @@ export class Google {
   }
 
   static init (_: any, conf: AuthPluginOptions) {
-    return async function init (request: any, reply: any) {
+    return async function googleInit (request: any, reply: any) {
       const driver = new GoogleProvider()
       const url = await driver.getRedirectUri(conf, request.query.redirect)
 
@@ -57,7 +57,7 @@ export class Google {
   }
 
   static callback (_: any, conf: AuthPluginOptions) {
-    return async function callback (request: any, reply: any) {
+    return async function googleCallback (request: any, reply: any) {
       const driver = new GoogleProvider()
       const ret = await driver.callback(conf, request.query)
 
