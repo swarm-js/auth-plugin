@@ -113,19 +113,22 @@ export class Fido2 {
       }
     )
 
-    swarm.controllers.addMethod(conf.controllerName, Fido2.fido2AuthOptions(), {
-      method: 'GET',
-      route: '/fido2/:id/auth-options',
-      title: 'Get FIDO2 auth options',
-      access: ['swarm:loggedIn'],
-      parameters: [
-        {
-          name: 'id',
-          description: 'Credential ID',
-          schema: { type: 'string', format: 'uuid' }
-        }
-      ]
-    })
+    swarm.controllers.addMethod(
+      conf.controllerName,
+      Fido2.fido2AuthOptions(swarm, conf),
+      {
+        method: 'GET',
+        route: '/fido2/:id/auth-options',
+        title: 'Get FIDO2 auth options',
+        parameters: [
+          {
+            name: 'id',
+            description: 'Credential ID',
+            schema: { type: 'string', format: 'uuid' }
+          }
+        ]
+      }
+    )
 
     swarm.controllers.addMethod(
       conf.controllerName,
@@ -321,19 +324,23 @@ export class Fido2 {
     }
   }
 
-  static fido2AuthOptions () {
+  static fido2AuthOptions (_: any, conf: AuthPluginOptions) {
     return async function fido2AuthOptions (request: any) {
       const authnOptions = await fido.assertionOptions()
 
-      request.user.swarmFido2Credentials =
-        request.user.swarmFido2Credentials.map((c: any) => {
-          if (c.id === request.params.id) {
-            c.authChallenge = Buffer.from(authnOptions.challenge)
-          }
-          return c
-        })
+      const user = await conf.model.findOne({
+        'swarmFido2Credentials.id': request.params.id
+      })
+      if (!user) throw new NotFound()
 
-      await request.user.save()
+      user.swarmFido2Credentials = user.swarmFido2Credentials.map((c: any) => {
+        if (c.id === request.params.id) {
+          c.authChallenge = Buffer.from(authnOptions.challenge)
+        }
+        return c
+      })
+
+      await user.save()
 
       authnOptions.challenge = Buffer.from(authnOptions.challenge)
 

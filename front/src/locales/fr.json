@@ -18,6 +18,9 @@
     "noThanks": "Non merci",
     "proposeTotpTitle": "Protégez votre compte",
     "proposeTotpDesc": "Vous pouvez ajouter une authentification à deux facteurs (2FA) avec Google Authenticator pour protéger votre compte. Ouvrez votre application Google Authenticator, scannez le QRCode ci-dessous et saisissez le code à 6 chiffres affiché dans l'application.",
+    "proposeFidoTitle": "Activer la connexion en 1 clic ?",
+    "proposeFidoDesc": "En activant la connexion en 1 clic, vous pourrez utiliser votre empreinte digitale pour vous connecter la prochaine fois, en évitant de saisir votre adresse email et votre mot de passe. C'est rapide et sécurisé !",
+    "proposeFidoOk": "Activer la connexion en 1 clic",
     "errors": {
       "noRedirect": "Aucune URL de redirection à été configurée, merci de contacter votre administrateur.",
       "nonAllowedRedirect": "L'URL de redirection fournie n'est pas autorisée, merci de contacter votre administrateur."

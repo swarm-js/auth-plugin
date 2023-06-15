@@ -18,6 +18,9 @@
     "noThanks": "No thanks",
     "proposeTotpTitle": "Protect your account",
     "proposeTotpDesc": "You can add a two factor authentication with Google Authenticator to protect your account. Open your Google Authenticator app, scan the QRCode below and write down the displayed 6-digits code.",
+    "proposeFidoTitle": "Enable one-touch log in ?",
+    "proposeFidoDesc": "By enabling one-touch log in, you can use your fingerprint to log in the next time, avoiding entering email address and password. It's fast and secure !",
+    "proposeFidoOk": "Enable one-touch log in",
     "errors": {
       "noRedirect": "No redirect URL has been configured, please contact your administrator.",
       "nonAllowedRedirect": "The supplied redirect URL is not allowed, please contact your administrator."

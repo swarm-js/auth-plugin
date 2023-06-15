@@ -46,7 +46,7 @@
         {{ $t('register.loginPrompt') }}
         <a
           :href="
-            conf.prefix + '/register?redirect=' + encodeURIComponent(redirect)
+            conf.prefix + '/login?redirect=' + encodeURIComponent(redirect)
           "
         >
           {{ $t('register.loginButton') }}
