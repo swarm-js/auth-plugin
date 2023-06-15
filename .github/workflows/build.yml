@@ -17,7 +17,7 @@ jobs:
       - run: yarn build
       - run: yarn
         working-directory: ./front
-      - run: yarn build
+      - run: yarn build-only
         working-directory: ./front
       - uses: JS-DevTools/npm-publish@v1
         with:
