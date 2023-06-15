@@ -1,7 +1,10 @@
 import { Swarm } from '@swarmjs/core'
+import { MailjetPlugin } from '@swarmjs/mailjet'
 import { AuthPlugin, AuthPluginOptions } from '../'
 import mongoose, { ConnectOptions } from 'mongoose'
 import { MongooseAuthPlugin } from '../'
+
+require('dotenv').config()
 
 // 1. Create an interface representing a document in MongoDB.
 interface IUser {
@@ -28,6 +31,13 @@ userSchema.plugin(MongooseAuthPlugin, {
   ethereum: true
 })
 
+userSchema.plugin(MailjetPlugin, {
+  apiKey: process.env.MJ_API_KEY,
+  apiSecret: process.env.MJ_API_SECRET,
+  fromEmail: process.env.FROM_EMAIL,
+  fromName: process.env.FROM_NAME
+})
+
 // 3. Create a Model.
 const User = mongoose.model<IUser>('User', userSchema)
 
@@ -52,7 +62,9 @@ app.use(AuthPlugin, {
     '468474862806-q2ib0054o8c8noovskksvf96d5aqjhsq.apps.googleusercontent.com',
   googleClientSecret: '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',
   facebookClientId: '496580118508802',
-  facebookClientSecret: 'fa5d4c5cbb952b086661e7a825edc2c7'
+  facebookClientSecret: 'fa5d4c5cbb952b086661e7a825edc2c7',
+  allowedDomains: ['jwt.io'],
+  validationRequired: true
 } as AuthPluginOptions)
 
 async function main () {

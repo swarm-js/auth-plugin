@@ -6,59 +6,41 @@
     <h1>{{ $t('error.title') }}</h1>
     <p>{{ errorMsg }}</p>
   </div>
-  <div class="error" v-else-if="validationRequired">
-    <h1>{{ $t('register.validationRequired.title') }}</h1>
-    <p>{{ $t('register.validationRequired.desc') }}</p>
+  <div class="error" v-else-if="confirm">
+    <h1>{{ $t('magiclink.confirm.title') }}</h1>
+    <p>{{ $t('magiclink.confirm.desc') }}</p>
   </div>
-  <div class="register" v-else>
-    <h1>{{ $t('register.title') }}</h1>
+  <div class="magiclink" v-else>
+    <h1>{{ $t('magiclink.title') }}</h1>
+    <p>{{ $t('magiclink.desc') }}</p>
 
-    <div class="alert" v-if="registerError">{{ registerErrorMessage }}</div>
+    <div class="alert" v-if="magiclinkError">{{ magiclinkErrorMessage }}</div>
 
-    <form @submit.native.prevent="tryregister" v-if="conf.password">
+    <form @submit.native.prevent="trymagiclink" v-if="conf.password">
       <label>
-        {{ $t('register.email') }}
-        <input type="email" v-model="form.email" />
-      </label>
-      <label>
-        {{ $t('register.password') }}
-        <input type="password" v-model="form.password" />
-      </label>
-      <label>
-        {{ $t('register.passwordConfirm') }}
-        <input
-          type="password"
-          v-model="form.passwordConfirm"
-          @keyup.enter="tryregister"
-        />
+        {{ $t('magiclink.email') }}
+        <input type="email" v-model="form.email" @keyup.enter="trymagiclink" />
       </label>
       <button
-        :disabled="!allowregister"
+        :disabled="!allowmagiclink"
         :style="{
           background: conf.themeColor,
           color:
             fontColorContrast(conf.themeColor) === '#000000' ? '#333' : '#fff'
         }"
       >
-        {{ $t('register.button') }}
+        {{ $t('magiclink.button') }}
       </button>
       <div class="more">
-        {{ $t('register.loginPrompt') }}
         <a
           :href="
-            conf.prefix + '/register?redirect=' + encodeURIComponent(redirect)
+            conf.prefix + '/login?redirect=' + encodeURIComponent(redirect)
           "
         >
-          {{ $t('register.loginButton') }}
+          {{ $t('magiclink.back') }}
         </a>
       </div>
     </form>
-    <div class="separator" v-if="displayOr">
-      <div class="bar"></div>
-      <div class="label">{{ $t('register.or') }}</div>
-      <div class="bar"></div>
-    </div>
-    <SocialButtons :conf="conf" :redirect="redirect" @error="handleError" />
   </div>
 </template>
 
@@ -66,7 +48,6 @@
 import { useI18n } from 'vue-i18n'
 import fontColorContrast from 'font-color-contrast'
 import { reactive, computed, ref } from 'vue'
-import SocialButtons from '../components/SocialButtons.vue'
 import Loader from '../components/Loader.vue'
 import { useApi } from '../composables/useApi'
 
@@ -81,17 +62,16 @@ const api = useApi(conf.prefix)
 
 let query = new URL(document.location).searchParams
 let redirect = query.get('redirect')
-let token = query.get('token')
 let error = false
 let errorMsg = ''
-let registerError = ref(false)
-let registerErrorMessage = ref('')
+let magiclinkError = ref(false)
+let magiclinkErrorMessage = ref('')
 let loading = ref(true)
-let validationRequired = ref(false)
+let confirm = ref(false)
 
 if (!redirect) {
   error = true
-  errorMsg = $t('register.errors.noRedirect')
+  errorMsg = $t('magiclink.errors.noRedirect')
 } else {
   try {
     const domain = new URL(redirect).host
@@ -100,61 +80,45 @@ if (!redirect) {
       (conf.allowedDomains ?? []).includes(domain) === false
     )
       throw new Error('Domain not allowed')
-    if (token) {
-      const url = new URL(redirect)
-      url.searchParams.set('token', token)
-      window.location.href = url.toString()
-    }
   } catch (err) {
     error = true
-    errorMsg = $t('register.errors.nonAllowedRedirect')
+    errorMsg = $t('magiclink.errors.nonAllowedRedirect')
   }
 }
 
 loading.value = false
 
-const form = reactive({ email: '', password: '', passwordConfirm: '' })
-const displayOr =
-  conf.password && (conf.facebook || conf.google || conf.ethereum)
+const form = reactive({ email: '' })
 
-const allowregister = computed(_ => {
+const allowmagiclink = computed(_ => {
   return (
     form.email.length &&
-    form.email.match(/^[A-Za-z0-9_!#$%&'*+\/=?`{|}~^.-]+@[A-Za-z0-9.-]+$/gm) &&
-    form.password.length >= 6 &&
-    form.password === form.passwordConfirm
+    form.email.match(/^[A-Za-z0-9_!#$%&'*+\/=?`{|}~^.-]+@[A-Za-z0-9.-]+$/gm)
   )
 })
 
 function handleError(msg: string) {
-  registerErrorMessage.value = msg
-  registerError.value = true
+  magiclinkErrorMessage.value = msg
+  magiclinkError.value = true
 }
 
-async function tryregister() {
-  if (!allowregister) return
+async function trymagiclink() {
+  if (!allowmagiclink) return
 
   try {
-    const ret = await api.post(`/register`, {
+    const ret = await api.post(`/magic-link`, {
       email: form.email,
-      password: form.password,
       redirect
     })
-    if (ret.validationRequired) {
-      validationRequired.value = true
-    } else {
-      const url = new URL(redirect)
-      url.searchParams.set('token', ret.token)
-      window.location.href = url.toString()
-    }
+    confirm.value = true
   } catch {
-    handleError($t('error.register'))
+    handleError($t('error.magiclink'))
   }
 }
 </script>
 
 <style lang="scss">
-.register {
+.magiclink {
   .alert {
     padding: 12px 20px;
     background: #ffebee;
@@ -221,6 +185,7 @@ async function tryregister() {
   .more {
     margin: 20px 0 0 0;
     font-size: 13px;
+    text-align: center;
   }
 
   .separator {

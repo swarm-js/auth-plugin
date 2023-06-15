@@ -42,10 +42,13 @@ export class Fido2 {
         title: 'Initialize FIDO2 configuration',
         access: ['swarm:loggedIn'],
         accepts: {
-          type: 'object',
-          properties: {
-            deviceName: {
-              type: 'string'
+          mimeType: 'application/json',
+          schema: {
+            type: 'object',
+            properties: {
+              deviceName: {
+                type: 'string'
+              }
             }
           }
         }

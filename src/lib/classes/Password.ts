@@ -1,9 +1,9 @@
 import { AuthPluginOptions } from '../interfaces/AuthPluginOptions'
-import { Unauthorized, Conflict } from 'http-errors'
+import { Unauthorized, Conflict, BadRequest } from 'http-errors'
 import { Crypt } from './Crypt'
 import { JWT } from './JWT'
 import { v4 as uuid } from 'uuid'
-import { Mail } from './Mail'
+import { Mail } from '@swarmjs/mail'
 
 export class Password {
   static setup (swarm: any, conf: AuthPluginOptions) {
@@ -17,20 +17,27 @@ export class Password {
         route: '/register',
         title: 'Create an account with email / password',
         accepts: {
-          type: 'object',
-          properties: {
-            email: {
-              type: 'string',
-              format: 'email',
-              description: 'Email address'
+          mimeType: 'application/json',
+          schema: {
+            type: 'object',
+            properties: {
+              email: {
+                type: 'string',
+                format: 'email',
+                description: 'Email address'
+              },
+              password: {
+                type: 'string',
+                minLength: 6,
+                description: 'Password'
+              },
+              redirect: {
+                type: 'string',
+                description: 'Redirection URL after confirming the email'
+              }
             },
-            password: {
-              type: 'string',
-              minLength: 6,
-              description: 'Password'
-            }
-          },
-          required: ['email', 'password']
+            required: ['email', 'password']
+          }
         },
         returns: [
           {
@@ -40,7 +47,8 @@ export class Password {
             schema: {
               type: 'object',
               properties: {
-                token: { type: 'string' }
+                token: { type: 'string' },
+                validationRequired: { type: 'boolean' }
               }
             }
           },
@@ -86,19 +94,22 @@ export class Password {
         route: '/login',
         title: 'Log in with email / password',
         accepts: {
-          type: 'object',
-          properties: {
-            email: {
-              type: 'string',
-              format: 'email',
-              description: 'Email address'
+          mimeType: 'application/json',
+          schema: {
+            type: 'object',
+            properties: {
+              email: {
+                type: 'string',
+                format: 'email',
+                description: 'Email address'
+              },
+              password: {
+                type: 'string',
+                description: 'Password'
+              }
             },
-            password: {
-              type: 'string',
-              description: 'Password'
-            }
-          },
-          required: ['email', 'password']
+            required: ['email', 'password']
+          }
         },
         returns: [
           {
@@ -142,19 +153,22 @@ export class Password {
         route: '/password',
         title: 'Change password',
         accepts: {
-          type: 'object',
-          properties: {
-            newPassword: {
-              type: 'string',
-              minLength: 6,
-              description: 'New password'
+          mimeType: 'application/json',
+          schema: {
+            type: 'object',
+            properties: {
+              newPassword: {
+                type: 'string',
+                minLength: 6,
+                description: 'New password'
+              },
+              oldPassword: {
+                type: 'string',
+                description: 'Old password'
+              }
             },
-            oldPassword: {
-              type: 'string',
-              description: 'Old password'
-            }
-          },
-          required: ['newPassword', 'oldPassword']
+            required: ['newPassword', 'oldPassword']
+          }
         },
         returns: [
           {
@@ -186,6 +200,74 @@ export class Password {
         ]
       }
     )
+
+    swarm.controllers.addMethod(
+      conf.controllerName,
+      Password.magicLink(swarm, conf),
+      {
+        method: 'POST',
+        route: '/magic-link',
+        title: 'Log in with a magic link',
+        accepts: {
+          mimeType: 'application/json',
+          schema: {
+            type: 'object',
+            properties: {
+              email: {
+                type: 'string',
+                format: 'email',
+                description: 'Email address'
+              },
+              redirect: {
+                type: 'string',
+                description: 'Redirection URL after confirming the email'
+              }
+            },
+            required: ['email', 'redirect']
+          }
+        },
+        returns: [
+          {
+            code: 200,
+            description: 'Magic link sent by email',
+            mimeType: 'application/json',
+            schema: {
+              type: 'object',
+              properties: {
+                status: { type: 'boolean' }
+              }
+            }
+          }
+        ]
+      }
+    )
+
+    swarm.controllers.addMethod(
+      conf.controllerName,
+      Password.processMagicLink(swarm, conf),
+      {
+        method: 'GET',
+        route: '/magic-link',
+        title: 'Log in with a magic link',
+        query: [
+          {
+            name: 'code',
+            description: 'Login code',
+            schema: {
+              type: 'string',
+              format: 'uuid'
+            }
+          },
+          {
+            name: 'redirect',
+            description: 'Redirection URL',
+            schema: {
+              type: 'string'
+            }
+          }
+        ]
+      }
+    )
   }
 
   static register (swarm: any, conf: AuthPluginOptions) {
@@ -204,11 +286,12 @@ export class Password {
       })
 
       if (conf.validationRequired) {
-        await Password.askValidation(swarm, conf, user)
+        await Password.askValidation(swarm, conf, user, request.body.redirect)
       }
 
       return {
-        token: JWT.generate(conf, user, false, conf.validationRequired)
+        token: JWT.generate(conf, user, false, conf.validationRequired),
+        validationRequired: conf.validationRequired
       }
     }
   }
@@ -216,7 +299,8 @@ export class Password {
   static async askValidation (
     swarm: any,
     conf: AuthPluginOptions,
-    user: any
+    user: any,
+    redirect?: string
   ): Promise<boolean> {
     user.swarmValidationCode = uuid()
     await user.save()
@@ -231,14 +315,17 @@ export class Password {
       .text(
         `Please click on the button below to confirm your email address, or copy-paste the following link in your browser address bar :<br />${swarm.getOption(
           'baseUrl'
-        )}${conf.prefix}/confirm-email?code=${user.swarmValidationCode}`
+        )}${conf.prefix}/confirm-email?code=${
+          user.swarmValidationCode
+        }&redirect=${encodeURIComponent(redirect ?? '')}`
       )
       .button(
         'Confirm email address',
         `${swarm.getOption('baseUrl')}${conf.prefix}/confirm-email?code=${
           user.swarmValidationCode
-        }`
+        }&redirect=${encodeURIComponent(redirect ?? '')}`
       )
+      .end()
 
     return await user.sendEmail('Confirm your email address', html)
   }
@@ -267,7 +354,12 @@ export class Password {
           totpNeeded = true
 
         return {
-          token: JWT.generate(conf, user, totpNeeded, !user.swarmValidated),
+          token: JWT.generate(
+            conf,
+            user,
+            totpNeeded,
+            !user.swarmValidated && conf.validationRequired
+          ),
           totpNeeded,
           validationRequired: !user.swarmValidated && conf.validationRequired,
           haveTotp:
@@ -296,6 +388,88 @@ export class Password {
       } catch {
         throw new Unauthorized()
       }
+    }
+  }
+
+  static magicLink (swarm: any, conf: AuthPluginOptions) {
+    return async function magicLink (request: any) {
+      const user = await conf.model.findOne({
+        [conf.emailField]: request.body.email
+      })
+
+      if (user) {
+        user.swarmMagicLinkCode = uuid()
+        user.swarmMagicLinkValidity = +new Date() + 15 * 60 * 1000
+        await user.save()
+
+        if (user.sendEmail === undefined) return false
+
+        const html = Mail.create('Magic link')
+          .header({
+            logo: conf.logo,
+            title: 'Login with a magic link'
+          })
+          .text(
+            `Please click on the button below to log in, or copy-paste the following link in your browser address bar :<br />${swarm.getOption(
+              'baseUrl'
+            )}${conf.prefix}/magic-link?code=${
+              user.swarmMagicLinkCode
+            }&redirect=${encodeURIComponent(request.body.redirect ?? '')}`
+          )
+          .button(
+            'Log in',
+            `${swarm.getOption('baseUrl')}${conf.prefix}/magic-link?code=${
+              user.swarmMagicLinkCode
+            }&redirect=${encodeURIComponent(request.body.redirect ?? '')}`
+          )
+          .end()
+
+        return await user.sendEmail('Log in to ' + conf.rpName, html)
+      }
+
+      return {
+        status: true
+      }
+    }
+  }
+
+  static processMagicLink (_: any, conf: AuthPluginOptions) {
+    return async function processMagicLink (request: any, reply: any) {
+      if (
+        request.query.code === undefined ||
+        request.query.redirect === undefined
+      )
+        throw new BadRequest()
+
+      const user = await conf.model.findOne({
+        swarmMagicLinkCode: request.query.code ?? 'wrong-code',
+        swarmMagicLinkValidity: {
+          $gte: +new Date()
+        }
+      })
+      const redirect = new URL(request.query.redirect)
+
+      if (user) {
+        user.swarmMagicLinkCode = ''
+        await user.save()
+
+        const token = JWT.generate(
+          conf,
+          user,
+          false,
+          !user.swarmValidated && conf.validationRequired
+        )
+
+        if (
+          (conf.allowedDomains ?? []).length &&
+          (conf.allowedDomains ?? []).includes(redirect.host) === false
+        )
+          throw new Unauthorized()
+
+        redirect.searchParams.set('token', token)
+      }
+
+      reply.redirect(redirect.toString())
     }
   }
 }

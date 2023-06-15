@@ -10,7 +10,12 @@
     <h1>{{ $t('login.askTotpTitle') }}</h1>
     <p>{{ $t('login.askTotpDesc') }}</p>
     <div class="alert" v-if="totpError">{{ $t('login.totpError') }}</div>
-    <input v-model="totpCode" class="biginput" maxlength="6" />
+    <input
+      v-model="totpCode"
+      class="biginput"
+      @keyup.enter="sendTotp"
+      maxlength="6"
+    />
     <button
       :disabled="/^[0-9]{6}$/.test(totpCode) === false"
       :style="{
@@ -33,7 +38,12 @@
     <p>{{ $t('login.proposeTotpDesc') }}</p>
     <img :src="totpQrcode" alt="QRCode" />
     <div class="alert" v-if="totpError">{{ $t('login.totpError') }}</div>
-    <input v-model="totpCode" class="biginput" maxlength="6" />
+    <input
+      v-model="totpCode"
+      class="biginput"
+      maxlength="6"
+      @keyup.enter="validateNewTotp"
+    />
     <button
       :disabled="/^[0-9]{6}$/.test(totpCode) === false"
       :style="{
@@ -63,7 +73,11 @@
       </label>
       <label>
         {{ $t('login.password') }}
-        <input type="password" v-model="form.password" />
+        <input
+          type="password"
+          v-model="form.password"
+          @keyup.enter="tryLogin"
+        />
       </label>
       <button
         :disabled="!allowLogin"
@@ -86,14 +100,14 @@
         </a>
       </div>
       <div class="more">
-        {{ $t('login.forgotPrompt') }}
+        {{ $t('login.magiclinkPrompt') }}
         <a
           :href="
             conf.prefix +
-            '/forgot-password?redirect=' +
+            '/ask-magic-link?redirect=' +
             encodeURIComponent(redirect)
           "
-          >{{ $t('login.forgotButton') }}</a
+          >{{ $t('login.magiclinkButton') }}</a
         >
       </div>
     </form>
@@ -244,7 +258,7 @@ async function proposeTotp (token) {
     resolve = res
     reject = rej
     totpCode.value = ''
-    totpToken.value = temporaryToken
+    totpToken.value = token
     proposeTotpOpened.value = true
 
     try {
@@ -272,13 +286,14 @@ async function tryLogin () {
     })
     if (ret.validationRequired) {
       handleError($t('error.validationRequired'))
-    } else if (ret.totpNeeded) {
-      ret.token = await handleTotp(ret.token)
-    } else if (conf.googleAuthenticator && !ret.haveTotp) {
-      await proposeTotp(ret.token)
     } else {
+      if (ret.totpNeeded) {
+        ret.token = await handleTotp(ret.token)
+      } else if (conf.googleAuthenticator && !ret.haveTotp) {
+        await proposeTotp(ret.token)
+      }
       const url = new URL(redirect)
-      url.searchParams.set('token', token)
+      url.searchParams.set('token', ret.token)
       window.location.href = url.toString()
     }
   } catch {

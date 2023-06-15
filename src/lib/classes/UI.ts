@@ -107,11 +107,11 @@ export class UI {
 
     swarm.controllers.addMethod(
       conf.controllerName,
-      UI.getForgotUI(swarm, conf),
+      UI.getMagicLinkUI(swarm, conf),
       {
         method: 'GET',
-        route: '/forgot-password',
-        title: 'Displays an UI to retrieve an email',
+        route: '/ask-magic-link',
+        title: 'Displays an UI to ask for a magic link',
         returns: [
           {
             code: 200,
@@ -181,10 +181,10 @@ export class UI {
     }
   }
 
-  static getForgotUI (_: any, conf: AuthPluginOptions) {
-    return async function getForgotUI (_: any, reply: any) {
+  static getMagicLinkUI (_: any, conf: AuthPluginOptions) {
+    return async function getMagicLinkUI (_: any, reply: any) {
       reply.header('Content-Type', 'text/html')
-      return await UI.getIndexFile('Retrieve your password', `forgot`, conf)
+      return await UI.getIndexFile('Ask for a magic link', `magiclink`, conf)
     }
   }
 

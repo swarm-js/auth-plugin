@@ -9,8 +9,8 @@
     "ethereumWallet": "Portefeuille Ethereum",
     "registerPrompt": "Pas encore de compte ?",
     "registerButton": "Inscrivez-vous",
-    "forgotPrompt": "Vous avez oublié votre mot de passe ?",
-    "forgotButton": "Récupération de mot de passe",
+    "magiclinkPrompt": "Se connecter sans mot de passe ?",
+    "magiclinkButton": "Demander un magic link",
     "askTotpTitle": "Vérifiez votre identité",
     "askTotpDesc": "Veuillez ouvrir Google Authenticator et écrivez ci-dessous le code affiché pour votre compte.",
     "totpError": "Le code saisi n'est pas valide.",
@@ -24,17 +24,47 @@
     }
   },
   "register": {
-    "title": "Inscription"
+    "title": "Inscription",
+    "email": "Adresse e-mail",
+    "password": "Mot de passe",
+    "passwordConfirm": "Confirmez le mot de passe",
+    "button": "Inscription",
+    "or": "Ou s'inscrire avec",
+    "ok": "OK",
+    "ethereumWallet": "Portefeuille Ethereum",
+    "loginPrompt": "Déjà inscrit ?",
+    "loginButton": "Connectez-vous",
+    "validationRequired": {
+      "title": "Veuillez confirmer votre adresse email",
+      "desc": "Votre compte a bien été créé, et vous pourrez vous connecter après avoir cliqué sur le lien contenu dans l'email que vous venez de recevoir."
+    },
+    "errors": {
+      "noRedirect": "Aucune URL de redirection à été configurée, merci de contacter votre administrateur.",
+      "nonAllowedRedirect": "L'URL de redirection fournie n'est pas autorisée, merci de contacter votre administrateur."
+    }
   },
   "emailConfirmed": "Votre compte à été validé. Vous pouvez désormais vous connecter.",
   "emailNotConfirmed": "Ce lien de validation n'est pas valide, ou votre compte à déjà été validé.",
-  "forgot": {
-    "title": "Mot de passe oublié"
+  "magiclink": {
+    "title": "Demander un magic link",
+    "desc": "Vous recevrez un email contenant un lien de connexion unique, valable 15 minutes.",
+    "email": "Adresse email",
+    "button": "Recevoir un magic link",
+    "back": "Retour",
+    "confirm": {
+      "title": "Vérifiez votre boite de réception",
+      "desc": "Si vous avez un compte ici, vous recevrez rapidement un magic link dans votre boite de réception !"
+    },
+    "errors": {
+      "noRedirect": "Aucune URL de redirection à été configurée, merci de contacter votre administrateur.",
+      "nonAllowedRedirect": "L'URL de redirection fournie n'est pas autorisée, merci de contacter votre administrateur."
+    }
   },
   "error": {
     "title": "Une erreur est survenue",
     "ethereum": "Une erreur est survenue pendant la connexion au portefeuille Ethereum",
     "login": "Une erreur est survenue pendant la connexion",
+    "magiclink": "Une erreur est survenue pendant la demande de magic link",
     "validationRequired": "Vous devez valider votre adresse email avant d'accéder à votre compte"
   }
 }

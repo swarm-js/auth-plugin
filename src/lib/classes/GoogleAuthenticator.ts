@@ -58,9 +58,12 @@ export class GoogleAuthenticator {
           'Validate the authenticator and permanently attaches it to the logged in user',
         access: ['swarm:loggedIn'],
         accepts: {
-          type: 'object',
-          properties: {
-            code: { type: 'number' }
+          mimeType: 'application/json',
+          schema: {
+            type: 'object',
+            properties: {
+              code: { type: 'string', pattern: '^[0-6]{6}$' }
+            }
           }
         },
         returns: [
@@ -112,16 +115,19 @@ export class GoogleAuthenticator {
 
     swarm.controllers.addMethod(
       conf.controllerName,
-      GoogleAuthenticator.verify(swarm, conf),
+      GoogleAuthenticator.verifyAuthenticator(swarm, conf),
       {
         method: 'POST',
         route: '/authenticator/verify',
         title: 'Verifies a TOTP against saved authenticator',
         access: ['swarm:totpNeeded'],
         accepts: {
-          type: 'object',
-          properties: {
-            code: { type: 'number' }
+          mimeType: 'application/json',
+          schema: {
+            type: 'object',
+            properties: {
+              code: { type: 'string', pattern: '^[0-6]{6}$' }
+            }
           }
         },
         returns: [
@@ -214,7 +220,7 @@ export class GoogleAuthenticator {
   }
 
   static add (_: any, conf: AuthPluginOptions) {
-    return async function add (req: any, res: any) {
+    return async function getQrCode (req: any) {
       if (
         !req.user.swarmGoogleAuthenticatorPending &&
         req.user.swarmGoogleAuthenticatorSecret
@@ -231,14 +237,11 @@ export class GoogleAuthenticator {
         req.user.swarmGoogleAuthenticatorSecret
       )
 
-      qrcode.toDataURL(otpauth, (err, imageUrl) => {
-        if (err) {
-          throw err
-        }
-        res.send({
-          qrcode: imageUrl
-        })
-      })
+      const imageUrl = await qrcode.toDataURL(otpauth)
+
+      return {
+        qrcode: imageUrl
+      }
     }
   }
 
@@ -251,12 +254,12 @@ export class GoogleAuthenticator {
         throw new BadRequest()
 
       try {
-        const isValid = authenticator.check(
-          req.body.code,
-          req.user.swarmGoogleAuthenticatorSecret
-        )
+        const isValid = authenticator.verify({
+          token: req.body.code,
+          secret: req.user.swarmGoogleAuthenticatorSecret
+        })
         if (!isValid) throw new Unauthorized()
-      } catch {
+      } catch (err: any) {
         throw new Unauthorized()
       }
 
@@ -269,8 +272,8 @@ export class GoogleAuthenticator {
     }
   }
 
-  static verify (_: any, conf: AuthPluginOptions) {
-    return async function verify (req: any) {
+  static verifyAuthenticator (_: any, conf: AuthPluginOptions) {
+    return async function verifyAuthenticator (req: any) {
       if (
         req.user.swarmGoogleAuthenticatorPending ||
         !req.user.swarmGoogleAuthenticatorSecret
@@ -289,7 +292,12 @@ export class GoogleAuthenticator {
 
       return {
         status: true,
-        token: JWT.generate(conf, req.user, false, !req.user.swarmValidated)
+        token: JWT.generate(
+          conf,
+          req.user,
+          false,
+          !req.user.swarmValidated && conf.validationRequired
+        )
       }
     }
   }

@@ -9,8 +9,8 @@
     "ethereumWallet": "Ethereum Wallet",
     "registerPrompt": "Don't have an account ?",
     "registerButton": "Register",
-    "forgotPrompt": "Forgot your password ?",
-    "forgotButton": "Retrieve your password",
+    "magiclinkPrompt": "Log in without password ?",
+    "magiclinkButton": "Ask for a magic link",
     "askTotpTitle": "Verify your identity",
     "askTotpDesc": "Please open Google Authenticator and write down the displayed code for your account.",
     "totpError": "The submitted code is not valid.",
@@ -24,17 +24,47 @@
     }
   },
   "register": {
-    "title": "Sign up"
+    "title": "Register",
+    "email": "Email address",
+    "password": "Password",
+    "passwordConfirm": "Confirm password",
+    "button": "Register",
+    "or": "Or register with",
+    "ok": "OK",
+    "ethereumWallet": "Ethereum Wallet",
+    "loginPrompt": "Already registered ?",
+    "loginButton": "Login",
+    "validationRequired": {
+      "title": "Please confirm your email address",
+      "desc": "Your account has been created, and you'll be able to login after clicking on the link you just recevied by email."
+    },
+    "errors": {
+      "noRedirect": "No redirect URL has been configured, please contact your administrator.",
+      "nonAllowedRedirect": "The supplied redirect URL is not allowed, please contact your administrator."
+    }
   },
   "emailConfirmed": "Your account has been validated. You can now log in.",
   "emailNotConfirmed": "This validation link is not valid, or your account has already been validated.",
-  "forgot": {
-    "title": "Forgotten password"
+  "magiclink": {
+    "title": "Ask for a magic link",
+    "desc": "You will receive an email containing a unique log in link, valid for 15 minutes.",
+    "email": "Email address",
+    "button": "Receive a magic link",
+    "back": "Back",
+    "confirm": {
+      "title": "Please check your inbox",
+      "desc": "If you have an account here, you'll receive a magic link in your inbox !"
+    },
+    "errors": {
+      "noRedirect": "No redirect URL has been configured, please contact your administrator.",
+      "nonAllowedRedirect": "The supplied redirect URL is not allowed, please contact your administrator."
+    }
   },
   "error": {
     "title": "An error has occured",
     "ethereum": "An error occured within the Ethereum wallet login",
     "login": "An error occured within the login",
+    "magiclink": "An error occured within the magic link request",
     "validationRequired": "You have to validate your email address before access your account"
   }
 }
