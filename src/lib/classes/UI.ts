@@ -6,7 +6,8 @@ export class UI {
   static setup (swarm: any, conf: AuthPluginOptions) {
     swarm.fastify.register(require('@fastify/static'), {
       root: path.join(__dirname, '../../../front/dist'),
-      prefix: '/auth-plugin-static'
+      prefix: '/auth-plugin-static',
+      decorateReply: !swarm.fastify.hasReplyDecorator('sendFile')
     })
 
     swarm.controllers.addMethod(
