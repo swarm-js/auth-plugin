@@ -70,7 +70,11 @@ export class AuthPlugin {
       if (req.user && req.totpNeeded) return ['swarm:totpNeeded']
 
       if (req.user)
-        return ['swarm:loggedIn', ...(req.user.swarmUserAccess ?? [])]
+        return [
+          'swarm:loggedIn',
+          `user:${req.user.id}`,
+          ...(req.user.swarmUserAccess ?? [])
+        ]
 
       return null
     })
