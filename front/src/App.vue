@@ -49,7 +49,7 @@ const page = window.AuthPluginPage ?? 'login'
       <div
         class="logo"
         :style="{ backgroundImage: `url(${conf.logo})` }"
-        v-if="conf.logo.length"
+        v-if="(conf.logo ?? '').length"
       ></div>
       <PageLogin v-if="page === 'login'" :conf="conf" />
       <PageRegister v-if="page === 'register'" :conf="conf" />
