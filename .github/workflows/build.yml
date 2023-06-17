@@ -14,11 +14,11 @@ jobs:
         with:
           node-version: 16
       - run: yarn
-      - run: yarn build
-      - run: yarn
         working-directory: ./front
       - run: yarn build-only
         working-directory: ./front
+      - run: yarn
+      - run: yarn build
       - uses: JS-DevTools/npm-publish@v1
         with:
           token: ${{ secrets.NPM_TOKEN }}
