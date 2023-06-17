@@ -95,7 +95,7 @@
   "files": [
     "build/main",
     "build/module",
-    "build/front",
+    "build/front/dist",
     "!**/*.spec.*",
     "CHANGELOG.md",
     "LICENSE",
