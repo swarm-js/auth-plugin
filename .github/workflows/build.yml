@@ -19,7 +19,7 @@ jobs:
         working-directory: ./front
       - run: yarn
       - run: yarn build
-      - run: cp -Rf front build/front
+      - run: cp -Rf front/dist build/front/dist
       - uses: JS-DevTools/npm-publish@v1
         with:
           token: ${{ secrets.NPM_TOKEN }}
