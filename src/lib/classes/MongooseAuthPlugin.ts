@@ -60,7 +60,6 @@ export function MongooseAuthPlugin (
     schema.static(
       'invite',
       async function invite (
-        this: typeof schema,
         email: string,
         redirect: string,
         preset: { [key: string]: any } = {}
