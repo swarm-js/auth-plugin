@@ -303,7 +303,7 @@ export class Password {
             schema: {
               type: 'object',
               properties: {
-                token: { type: 'boolean' }
+                token: { type: 'string' }
               }
             }
           },
