@@ -125,6 +125,39 @@ export class UI {
         ]
       }
     )
+
+    if (conf.invite)
+      swarm.controllers.addMethod(
+        conf.controllerName,
+        UI.getAcceptInvitationUI(swarm, conf),
+        {
+          method: 'GET',
+          route: '/accept-invitation',
+          title: 'UI to accept an invitation',
+          query: [
+            {
+              name: 'redirect',
+              schema: { type: 'string', format: 'uri' },
+              description: 'Redirection URI'
+            },
+            {
+              name: 'code',
+              schema: { type: 'string', format: 'uuid' },
+              description: 'Validation code'
+            }
+          ],
+          returns: [
+            {
+              code: 200,
+              description: 'HTML page',
+              mimeType: 'text/html',
+              schema: {
+                type: 'string'
+              }
+            }
+          ]
+        }
+      )
   }
 
   static getLoginUI (_: any, conf: AuthPluginOptions) {
@@ -138,6 +171,17 @@ export class UI {
     return async function getRegisterUI (_: any, reply: any) {
       reply.header('Content-Type', 'text/html')
       return await UI.getIndexFile('Register', `register`, conf)
+    }
+  }
+
+  static getAcceptInvitationUI (_: any, conf: AuthPluginOptions) {
+    return async function getAcceptInvitationUI (_: any, reply: any) {
+      reply.header('Content-Type', 'text/html')
+      return await UI.getIndexFile(
+        'Accept invitation',
+        `acceptinvitation`,
+        conf
+      )
     }
   }
 

@@ -63,10 +63,23 @@
       "nonAllowedRedirect": "L'URL de redirection fournie n'est pas autorisée, merci de contacter votre administrateur."
     }
   },
+  "acceptInvitation": {
+    "title": "Créez votre mot de passe",
+    "desc": "Choisissez le mot de passe de votre nouveau compte, avec au moins 6 caractères.",
+    "button": "Créer mon compte",
+    "password": "Mot de passe",
+    "passwordConfirm": "Confirmez votre mot de passe",
+    "errors": {
+      "noCode": "Aucun code d'invitation n'a été fourni.",
+      "noRedirect": "Aucune URL de redirection à été configurée, merci de contacter votre administrateur.",
+      "nonAllowedRedirect": "L'URL de redirection fournie n'est pas autorisée, merci de contacter votre administrateur."
+    }
+  },
   "error": {
     "title": "Une erreur est survenue",
     "ethereum": "Une erreur est survenue pendant la connexion au portefeuille Ethereum",
     "login": "Une erreur est survenue pendant la connexion",
+    "acceptInvitation": "Une erreur est survenue pendant la création du compte",
     "magiclink": "Une erreur est survenue pendant la demande de magic link",
     "validationRequired": "Vous devez valider votre adresse email avant d'accéder à votre compte"
   }

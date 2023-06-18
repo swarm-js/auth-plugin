@@ -6,59 +6,38 @@
     <h1>{{ $t('error.title') }}</h1>
     <p>{{ errorMsg }}</p>
   </div>
-  <div class="error" v-else-if="validationRequired">
-    <h1>{{ $t('register.validationRequired.title') }}</h1>
-    <p>{{ $t('register.validationRequired.desc') }}</p>
-  </div>
-  <div class="register" v-else>
-    <h1>{{ $t('register.title') }}</h1>
+  <div class="acceptInvitation" v-else>
+    <h1>{{ $t('acceptInvitation.title') }}</h1>
+    <p>{{ $t('acceptInvitation.desc') }}</p>
 
-    <div class="alert" v-if="registerError">{{ registerErrorMessage }}</div>
+    <div class="alert" v-if="acceptInvitationError">
+      {{ acceptInvitationErrorMessage }}
+    </div>
 
-    <form @submit.native.prevent="tryregister" v-if="conf.password">
+    <form @submit.native.prevent="tryacceptInvitation">
       <label>
-        {{ $t('register.email') }}
-        <input type="email" v-model="form.email" />
-      </label>
-      <label>
-        {{ $t('register.password') }}
+        {{ $t('acceptInvitation.password') }}
         <input type="password" v-model="form.password" />
       </label>
       <label>
-        {{ $t('register.passwordConfirm') }}
+        {{ $t('acceptInvitation.passwordConfirm') }}
         <input
           type="password"
           v-model="form.passwordConfirm"
-          @keyup.enter="tryregister"
+          @keyup.enter="tryacceptInvitation"
         />
       </label>
       <button
-        :disabled="!allowregister"
+        :disabled="!allowacceptInvitation"
         :style="{
           background: conf.themeColor,
           color:
             fontColorContrast(conf.themeColor) === '#000000' ? '#333' : '#fff'
         }"
       >
-        {{ $t('register.button') }}
+        {{ $t('acceptInvitation.button') }}
       </button>
-      <div class="more">
-        {{ $t('register.loginPrompt') }}
-        <a
-          :href="
-            conf.prefix + '/login?redirect=' + encodeURIComponent(redirect)
-          "
-        >
-          {{ $t('register.loginButton') }}
-        </a>
-      </div>
     </form>
-    <div class="separator" v-if="displayOr">
-      <div class="bar"></div>
-      <div class="label">{{ $t('register.or') }}</div>
-      <div class="bar"></div>
-    </div>
-    <SocialButtons :conf="conf" :redirect="redirect" @error="handleError" />
   </div>
 </template>
 
@@ -66,7 +45,6 @@
 import { useI18n } from 'vue-i18n'
 import fontColorContrast from 'font-color-contrast'
 import { reactive, computed, ref } from 'vue'
-import SocialButtons from '../components/SocialButtons.vue'
 import Loader from '../components/Loader.vue'
 import { useApi } from '../composables/useApi'
 
@@ -81,17 +59,19 @@ const api = useApi(conf.prefix)
 
 let query = new URL(window.location).searchParams
 let redirect = query.get('redirect')
-let token = query.get('token')
+let code = query.get('code')
 let error = false
 let errorMsg = ''
-let registerError = ref(false)
-let registerErrorMessage = ref('')
+let acceptInvitationError = ref(false)
+let acceptInvitationErrorMessage = ref('')
 let loading = ref(true)
-let validationRequired = ref(false)
 
 if (!redirect) {
   error = true
-  errorMsg = $t('register.errors.noRedirect')
+  errorMsg = $t('acceptInvitation.errors.noRedirect')
+} else if (!code) {
+  error = true
+  errorMsg = $t('acceptInvitation.errors.noCode')
 } else {
   try {
     const domain = new URL(redirect).host
@@ -100,61 +80,45 @@ if (!redirect) {
       (conf.allowedDomains ?? []).includes(domain) === false
     )
       throw new Error('Domain not allowed')
-    if (token) {
-      const url = new URL(redirect)
-      url.searchParams.set('token', token)
-      window.location.href = url.toString()
-    }
   } catch (err) {
     error = true
-    errorMsg = $t('register.errors.nonAllowedRedirect')
+    errorMsg = $t('acceptInvitation.errors.nonAllowedRedirect')
   }
 }
 
 loading.value = false
 
-const form = reactive({ email: '', password: '', passwordConfirm: '' })
-const displayOr =
-  conf.password && (conf.facebook || conf.google || conf.ethereum)
+const form = reactive({ password: '', passwordConfirm: '' })
 
-const allowregister = computed(_ => {
-  return (
-    form.email.length &&
-    form.email.match(/^[A-Za-z0-9_!#$%&'*+\/=?`{|}~^.-]+@[A-Za-z0-9.-]+$/gm) &&
-    form.password.length >= 6 &&
-    form.password === form.passwordConfirm
-  )
+const allowacceptInvitation = computed(_ => {
+  return form.password.length >= 6 && form.password === form.passwordConfirm
 })
 
 function handleError(msg: string) {
-  registerErrorMessage.value = msg
-  registerError.value = true
+  acceptInvitationErrorMessage.value = msg
+  acceptInvitationError.value = true
 }
 
-async function tryregister() {
-  if (!allowregister) return
+async function tryacceptInvitation() {
+  if (!allowacceptInvitation) return
 
   try {
-    const ret = await api.post(`/register`, {
-      email: form.email,
+    const ret = await api.post(`/accept-invitation`, {
+      code,
       password: form.password,
       redirect
     })
-    if (ret.validationRequired) {
-      validationRequired.value = true
-    } else {
-      const url = new URL(redirect)
-      url.searchParams.set('token', ret.token)
-      window.location.href = url.toString()
-    }
+    const url = new URL(redirect)
+    url.searchParams.set('token', ret.token)
+    window.location.href = url.toString()
   } catch {
-    handleError($t('error.register'))
+    handleError($t('error.acceptInvitation'))
   }
 }
 </script>
 
 <style lang="scss">
-.register {
+.acceptInvitation {
   .alert {
     padding: 12px 20px;
     background: #ffebee;

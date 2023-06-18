@@ -63,10 +63,23 @@
       "nonAllowedRedirect": "The supplied redirect URL is not allowed, please contact your administrator."
     }
   },
+  "acceptInvitation": {
+    "title": "Choose your password",
+    "desc": "Choose your new account password, at least 6 characters.",
+    "button": "Create my account",
+    "password": "Password",
+    "passwordConfirm": "Confirm password",
+    "errors": {
+      "noCode": "No invitation code has been supplied, please contact your administrator.",
+      "noRedirect": "No redirect URL has been configured, please contact your administrator.",
+      "nonAllowedRedirect": "The supplied redirect URL is not allowed, please contact your administrator."
+    }
+  },
   "error": {
     "title": "An error has occured",
     "ethereum": "An error occured within the Ethereum wallet login",
     "login": "An error occured within the login",
+    "acceptInvitation": "An error occured within the account creation",
     "magiclink": "An error occured within the magic link request",
     "validationRequired": "You have to validate your email address before access your account"
   }

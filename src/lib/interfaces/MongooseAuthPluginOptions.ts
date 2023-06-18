@@ -5,4 +5,9 @@ export interface MongooseAuthPluginOptions {
   google: boolean
   googleAuthenticator: boolean
   ethereum: boolean
+  invite: boolean
+  emailField: string
+  logo: string | null
+  rpName: null | string
+  prefix: string
 }

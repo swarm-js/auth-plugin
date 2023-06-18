@@ -28,6 +28,7 @@ export class AuthPlugin {
       rpId: null,
       origin: null,
       password: true,
+      invite: false,
       fido2: false,
       facebook: false,
       google: false,
@@ -45,6 +46,7 @@ export class AuthPlugin {
       facebookClientSecret: '',
       facebookRedirect: '',
       allowedDomains: [],
+      userAccess: () => [],
       ...options
     }
 
@@ -73,7 +75,8 @@ export class AuthPlugin {
         return [
           'swarm:loggedIn',
           `user:${req.user.id}`,
-          ...(req.user.swarmUserAccess ?? [])
+          ...(req.user.swarmUserAccess ?? []),
+          ...conf.userAccess(req)
         ]
 
       return null

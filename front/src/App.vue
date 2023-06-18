@@ -6,6 +6,7 @@ import PageRegister from './pages/Register.vue'
 import PageEmailConfirmed from './pages/EmailConfirmed.vue'
 import PageEmailNotConfirmed from './pages/EmailNotConfirmed.vue'
 import PageMagicLink from './pages/MagicLink.vue'
+import PageAcceptInvitation from './pages/AcceptInvitation.vue'
 
 declare global {
   interface Window {
@@ -56,6 +57,7 @@ const page = window.AuthPluginPage ?? 'login'
       <PageEmailConfirmed v-if="page === 'emailConfirmed'" :conf="conf" />
       <PageEmailNotConfirmed v-if="page === 'emailNotConfirmed'" :conf="conf" />
       <PageMagicLink v-if="page === 'magiclink'" :conf="conf" />
+      <PageAcceptInvitation v-if="page === 'acceptinvitation'" :conf="conf" />
     </div>
   </main>
 </template>

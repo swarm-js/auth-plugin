@@ -268,10 +268,88 @@ export class Password {
         ]
       }
     )
+
+    swarm.controllers.addMethod(
+      conf.controllerName,
+      Password.acceptInvitation(swarm, conf),
+      {
+        method: 'POST',
+        route: '/accept-invitation',
+        title: 'Log in with a magic link',
+        accepts: {
+          mimeType: 'application/json',
+          schema: {
+            type: 'object',
+            properties: {
+              code: {
+                type: 'string',
+                format: 'uuid',
+                description: 'Invitation code'
+              },
+              password: {
+                type: 'string',
+                minLength: 6,
+                description: 'Password'
+              }
+            },
+            required: ['code', 'password']
+          }
+        },
+        returns: [
+          {
+            code: 200,
+            description: 'Registered user JWT token',
+            mimeType: 'application/json',
+            schema: {
+              type: 'object',
+              properties: {
+                token: { type: 'boolean' }
+              }
+            }
+          },
+          {
+            code: 403,
+            description: 'Wrong invitation code',
+            mimeType: 'application/json',
+            schema: {
+              type: 'object',
+              properties: {
+                statusCode: { type: 'number' },
+                code: { type: 'string' },
+                error: { type: 'string' },
+                message: { type: 'string' },
+                time: { type: 'string' }
+              }
+            }
+          }
+        ]
+      }
+    )
+  }
+
+  static acceptInvitation (_: any, conf: AuthPluginOptions) {
+    return async function acceptInvitation (request: any) {
+      const user = await conf.model.findOne({
+        swarmInvitationCode: request.body.code
+      })
+      if (!user) throw new Unauthorized()
+
+      user.swarmPassword = await Crypt.hash(request.body.password)
+      user.swarmInvited = false
+      user.swarmInvitationCode = ''
+      user.swarmValidated = true
+      await user.save()
+
+      return {
+        token: JWT.generate(conf, user, false, false)
+      }
+    }
   }
 
   static register (swarm: any, conf: AuthPluginOptions) {
     return async function register (request: any) {
+      request.body.email = request.body.email.trim().toLowerCase()
+
       const existing = await conf.model.findOne({
         [conf.emailField]: request.body.email
       })
@@ -332,6 +410,8 @@ export class Password {
 
   static login (_: any, conf: AuthPluginOptions) {
     return async function login (request: any) {
+      request.body.email = request.body.email.trim().toLowerCase()
+
       const user = await conf.model.findOne({
         [conf.emailField]: request.body.email
       })

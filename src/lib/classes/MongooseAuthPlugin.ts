@@ -1,4 +1,7 @@
 import { MongooseAuthPluginOptions } from '../interfaces/MongooseAuthPluginOptions'
+import { v4 as uuid } from 'uuid'
+import { Conflict } from 'http-errors'
+import { Mail } from '@swarmjs/mail'
 
 export function MongooseAuthPlugin (
   schema: any,
@@ -11,6 +14,11 @@ export function MongooseAuthPlugin (
     google: false,
     googleAuthenticator: false,
     ethereum: false,
+    invite: false,
+    emailField: 'email',
+    logo: null,
+    rpName: '',
+    prefix: '/auth',
     ...options
   }
 
@@ -44,4 +52,69 @@ export function MongooseAuthPlugin (
       ]
     })
   if (conf.ethereum) schema.add({ swarmEthereumWallet: 'string' })
+  if (conf.invite) {
+    schema.add({
+      swarmInvited: 'boolean',
+      swarmInvitationCode: 'string'
+    })
+    schema.static(
+      'invite',
+      async function invite (
+        this: typeof schema,
+        email: string,
+        redirect: string,
+        preset: { [key: string]: any } = {}
+      ) {
+        email = email.trim().toLowerCase()
+
+        const existing = await this.findOne({
+          [conf.emailField]: email
+        })
+        if (existing) throw new Conflict()
+
+        const user = await this.create({
+          [conf.emailField]: email,
+          swarmInvited: true,
+          swarmInvitationCode: uuid(),
+          swarmValidated: false,
+          ...preset
+        })
+        if (user.sendEmail === undefined)
+          throw new Error(
+            'Cannot send email, no email provider has been installed'
+          )
+
+        const swarmOptions: { [key: string]: any } = JSON.parse(
+          process.env.SWARM_OPTIONS ?? '{}'
+        )
+
+        const html = Mail.create(`You have been invited to ${conf.rpName} !`)
+          .header({
+            logo: conf.logo,
+            title: `You have been invited to register to ${conf.rpName}`
+          })
+          .text(
+            `Please click on the button below to accept your invitation and create your account, or copy-paste the following link in your browser address bar :<br />${
+              swarmOptions?.baseUrl ?? ''
+            }${conf.prefix}/accept-invitation?code=${
+              user.swarmInvitationCode
+            }&redirect=${encodeURIComponent(redirect ?? '')}`
+          )
+          .button(
+            'Accept invitation',
+            `${swarmOptions?.baseUrl ?? ''}${
+              conf.prefix
+            }/accept-invitation?code=${
+              user.swarmInvitationCode
+            }&redirect=${encodeURIComponent(redirect ?? '')}`
+          )
+          .end()
+
+        return await user.sendEmail(
+          `You have been invited to ${conf.rpName}`,
+          html
+        )
+      }
+    )
+  }
 }

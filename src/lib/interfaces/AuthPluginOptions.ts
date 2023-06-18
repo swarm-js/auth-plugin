@@ -2,11 +2,8 @@ import { MongooseAuthPluginOptions } from './MongooseAuthPluginOptions'
 
 export interface AuthPluginOptions extends MongooseAuthPluginOptions {
   controllerName: string
-  prefix: string
   jwtKey: string
-  logo: string | null
   themeColor: string
-  rpName: null | string
   rpId: null | string
   origin: null | string
   model: any
@@ -17,10 +14,10 @@ export interface AuthPluginOptions extends MongooseAuthPluginOptions {
   facebookClientId: string
   facebookClientSecret: string
   facebookRedirect: string
-  emailField: string
   firstnameField: string
   lastnameField: string
   avatarField: string
   googleAuthenticatorService: string
   allowedDomains: string[]
+  userAccess: (req: any) => string | string[]
 }

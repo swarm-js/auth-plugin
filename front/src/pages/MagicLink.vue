@@ -60,7 +60,7 @@ const conf: any = props.conf
 
 const api = useApi(conf.prefix)
 
-let query = new URL(document.location).searchParams
+let query = new URL(window.location).searchParams
 let redirect = query.get('redirect')
 let error = false
 let errorMsg = ''

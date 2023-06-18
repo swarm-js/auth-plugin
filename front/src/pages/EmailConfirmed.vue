@@ -19,7 +19,7 @@ const { conf } = defineProps({
   conf: {}
 })
 
-let query = new URL(document.location).searchParams
+let query = new URL(window.location).searchParams
 let redirect = query.get('redirect')
 </script>
 
