@@ -60,6 +60,7 @@ export function MongooseAuthPlugin (
     schema.static(
       'invite',
       async function invite (
+        request: any,
         email: string,
         redirect: string,
         preset: { [key: string]: any } = {}
@@ -87,30 +88,54 @@ export function MongooseAuthPlugin (
           process.env.SWARM_OPTIONS ?? '{}'
         )
 
-        const html = Mail.create(`You have been invited to ${conf.rpName} !`)
+        const invitationUrl = `${swarmOptions?.baseUrl ?? ''}${
+          conf.prefix
+        }/accept-invitation?code=${
+          user.swarmInvitationCode
+        }&redirect=${encodeURIComponent(redirect ?? '')}`
+
+        const html = Mail.create(
+          request.$t(
+            `You have been invited to {name} !`,
+            {
+              name: conf.rpName
+            },
+            request.lang,
+            'auth-plugin'
+          )
+        )
           .header({
             logo: conf.logo,
-            title: `You have been invited to register to ${conf.rpName}`
+            title: request.$t(
+              'You have been invited to register to {name}',
+              { name: conf.rpName },
+              request.lang,
+              'auth-plugin'
+            )
           })
           .text(
-            `Please click on the button below to accept your invitation and create your account, or copy-paste the following link in your browser address bar :<br />${
-              swarmOptions?.baseUrl ?? ''
-            }${conf.prefix}/accept-invitation?code=${
-              user.swarmInvitationCode
-            }&redirect=${encodeURIComponent(redirect ?? '')}`
+            request.$t(
+              'Please click on the button below to accept your invitation and create your account, or copy-paste the following link in your browser address bar :<br />{url}',
+              { url: invitationUrl },
+              request.lang,
+              'auth-plugin'
+            )
           )
           .button(
-            'Accept invitation',
-            `${swarmOptions?.baseUrl ?? ''}${
-              conf.prefix
-            }/accept-invitation?code=${
-              user.swarmInvitationCode
-            }&redirect=${encodeURIComponent(redirect ?? '')}`
+            request.$t('Accept invitation', {}, request.lang, 'auth-plugin'),
+            invitationUrl
           )
           .end()
 
         return await user.sendEmail(
-          `You have been invited to ${conf.rpName}`,
+          request.$t(
+            `You have been invited to {name} !`,
+            {
+              name: conf.rpName
+            },
+            request.lang,
+            'auth-plugin'
+          ),
           html
         )
       }

@@ -102,5 +102,13 @@ export class AuthPlugin {
     Facebook.setup(swarm, conf)
     Google.setup(swarm, conf)
     Ethereum.setup(swarm, conf)
+
+    swarm.i18n.addTranslations(
+      {
+        en: require('../locales/en.json'),
+        fr: require('../locales/fr.json')
+      },
+      'auth-plugin'
+    )
   }
 }

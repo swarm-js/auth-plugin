@@ -364,7 +364,13 @@ export class Password {
       })
 
       if (conf.validationRequired) {
-        await Password.askValidation(swarm, conf, user, request.body.redirect)
+        await Password.askValidation(
+          request,
+          swarm,
+          conf,
+          user,
+          request.body.redirect
+        )
       }
 
       return {
@@ -375,6 +381,7 @@ export class Password {
   }
 
   static async askValidation (
+    request: any,
     swarm: any,
     conf: AuthPluginOptions,
     user: any,
@@ -385,27 +392,52 @@ export class Password {
 
     if (user.sendEmail === undefined) return false
 
-    const html = Mail.create('Please confirm your email address')
+    const validationUrl = `${swarm.getOption('baseUrl')}${
+      conf.prefix
+    }/confirm-email?code=${
+      user.swarmValidationCode
+    }&redirect=${encodeURIComponent(redirect ?? '')}`
+
+    const html = Mail.create(
+      request.$t(
+        'Please confirm your email address',
+        {},
+        request.lang,
+        'auth-plugin'
+      )
+    )
       .header({
         logo: conf.logo,
-        title: 'Please confirm your email address'
+        title: request.$t(
+          'Please confirm your email address',
+          {},
+          request.lang,
+          'auth-plugin'
+        )
       })
       .text(
-        `Please click on the button below to confirm your email address, or copy-paste the following link in your browser address bar :<br />${swarm.getOption(
-          'baseUrl'
-        )}${conf.prefix}/confirm-email?code=${
-          user.swarmValidationCode
-        }&redirect=${encodeURIComponent(redirect ?? '')}`
+        request.$t(
+          `Please click on the button below to confirm your email address, or copy-paste the following link in your browser address bar :<br />{url}`,
+          { url: validationUrl },
+          request.lang,
+          'auth-plugin'
+        )
       )
       .button(
-        'Confirm email address',
-        `${swarm.getOption('baseUrl')}${conf.prefix}/confirm-email?code=${
-          user.swarmValidationCode
-        }&redirect=${encodeURIComponent(redirect ?? '')}`
+        request.$t(
+          'Confirm your email address',
+          {},
+          request.lang,
+          'auth-plugin'
+        ),
+        validationUrl
       )
       .end()
 
-    return await user.sendEmail('Confirm your email address', html)
+    return await user.sendEmail(
+      request.$t('Confirm your email address', {}, request.lang, 'auth-plugin'),
+      html
+    )
   }
 
   static login (_: any, conf: AuthPluginOptions) {
@@ -484,27 +516,47 @@ export class Password {
 
         if (user.sendEmail === undefined) return false
 
-        const html = Mail.create('Magic link')
+        const linkUrl = `${swarm.getOption('baseUrl')}${
+          conf.prefix
+        }/magic-link?code=${
+          user.swarmMagicLinkCode
+        }&redirect=${encodeURIComponent(request.body.redirect ?? '')}`
+
+        const html = Mail.create(
+          request.$t('Magic link', {}, request.lang, 'auth-plugin')
+        )
           .header({
             logo: conf.logo,
-            title: 'Login with a magic link'
+            title: request.$t(
+              'Login with a magic link',
+              {},
+              request.lang,
+              'auth-plugin'
+            )
           })
           .text(
-            `Please click on the button below to log in, or copy-paste the following link in your browser address bar :<br />${swarm.getOption(
-              'baseUrl'
-            )}${conf.prefix}/magic-link?code=${
-              user.swarmMagicLinkCode
-            }&redirect=${encodeURIComponent(request.body.redirect ?? '')}`
+            request.$t(
+              `Please click on the button below to log in, or copy-paste the following link in your browser address bar :<br />{url}`,
+              { url: linkUrl },
+              request.lang,
+              'auth-plugin'
+            )
           )
           .button(
-            'Log in',
-            `${swarm.getOption('baseUrl')}${conf.prefix}/magic-link?code=${
-              user.swarmMagicLinkCode
-            }&redirect=${encodeURIComponent(request.body.redirect ?? '')}`
+            request.$t('Log in', {}, request.lang, 'auth-plugin'),
+            linkUrl
           )
           .end()
 
-        return await user.sendEmail('Log in to ' + conf.rpName, html)
+        return await user.sendEmail(
+          request.$t(
+            'Log in to {name}',
+            { name: conf.rpName },
+            request.lang,
+            'auth-plugin'
+          ),
+          html
+        )
       }
 
       return {
