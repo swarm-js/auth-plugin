@@ -399,19 +399,14 @@ export class Password {
     }&redirect=${encodeURIComponent(redirect ?? '')}`
 
     const html = Mail.create(
-      request.$t(
-        'Please confirm your email address',
-        {},
-        request.lang,
-        'auth-plugin'
-      )
+      request.$t('Please confirm your email address', {}, null, 'auth-plugin')
     )
       .header({
         logo: conf.logo,
         title: request.$t(
           'Please confirm your email address',
           {},
-          request.lang,
+          null,
           'auth-plugin'
         )
       })
@@ -419,23 +414,18 @@ export class Password {
         request.$t(
           `Please click on the button below to confirm your email address, or copy-paste the following link in your browser address bar :<br />{url}`,
           { url: validationUrl },
-          request.lang,
+          null,
           'auth-plugin'
         )
       )
       .button(
-        request.$t(
-          'Confirm your email address',
-          {},
-          request.lang,
-          'auth-plugin'
-        ),
+        request.$t('Confirm your email address', {}, null, 'auth-plugin'),
         validationUrl
       )
       .end()
 
     return await user.sendEmail(
-      request.$t('Confirm your email address', {}, request.lang, 'auth-plugin'),
+      request.$t('Confirm your email address', {}, null, 'auth-plugin'),
       html
     )
   }
@@ -523,14 +513,14 @@ export class Password {
         }&redirect=${encodeURIComponent(request.body.redirect ?? '')}`
 
         const html = Mail.create(
-          request.$t('Magic link', {}, request.lang, 'auth-plugin')
+          request.$t('Magic link', {}, null, 'auth-plugin')
         )
           .header({
             logo: conf.logo,
             title: request.$t(
               'Login with a magic link',
               {},
-              request.lang,
+              null,
               'auth-plugin'
             )
           })
@@ -538,21 +528,18 @@ export class Password {
             request.$t(
               `Please click on the button below to log in, or copy-paste the following link in your browser address bar :<br />{url}`,
               { url: linkUrl },
-              request.lang,
+              null,
               'auth-plugin'
             )
           )
-          .button(
-            request.$t('Log in', {}, request.lang, 'auth-plugin'),
-            linkUrl
-          )
+          .button(request.$t('Log in', {}, null, 'auth-plugin'), linkUrl)
           .end()
 
         return await user.sendEmail(
           request.$t(
             'Log in to {name}',
             { name: conf.rpName },
-            request.lang,
+            null,
             'auth-plugin'
           ),
           html

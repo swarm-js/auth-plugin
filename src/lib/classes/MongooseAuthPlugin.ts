@@ -100,7 +100,7 @@ export function MongooseAuthPlugin (
             {
               name: conf.rpName
             },
-            request.lang,
+            null,
             'auth-plugin'
           )
         )
@@ -109,7 +109,7 @@ export function MongooseAuthPlugin (
             title: request.$t(
               'You have been invited to register to {name}',
               { name: conf.rpName },
-              request.lang,
+              null,
               'auth-plugin'
             )
           })
@@ -117,12 +117,12 @@ export function MongooseAuthPlugin (
             request.$t(
               'Please click on the button below to accept your invitation and create your account, or copy-paste the following link in your browser address bar :<br />{url}',
               { url: invitationUrl },
-              request.lang,
+              null,
               'auth-plugin'
             )
           )
           .button(
-            request.$t('Accept invitation', {}, request.lang, 'auth-plugin'),
+            request.$t('Accept invitation', {}, null, 'auth-plugin'),
             invitationUrl
           )
           .end()
@@ -133,7 +133,7 @@ export function MongooseAuthPlugin (
             {
               name: conf.rpName
             },
-            request.lang,
+            null,
             'auth-plugin'
           ),
           html
