@@ -21,6 +21,8 @@ jobs:
       - run: yarn build
       - run: mkdir build/front
       - run: cp -Rf front/dist build/front/dist
+      - run: cp -Rf src/lib/locales build/main/lib/locales
+      - run: cp -Rf src/lib/locales build/module/lib/locales
       - uses: JS-DevTools/npm-publish@v1
         with:
           token: ${{ secrets.NPM_TOKEN }}
