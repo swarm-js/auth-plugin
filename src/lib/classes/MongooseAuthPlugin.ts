@@ -24,10 +24,10 @@ export function MongooseAuthPlugin (
 
   schema.add({
     swarmUserAccess: [String],
-    swarmValidated: { type: Boolean, default: false },
-    swarmValidationCode: { type: String },
-    swarmMagicLinkCode: { type: String },
-    swarmMagicLinkValidity: { type: Number }
+    swarmValidated: { [schema.get('typeKey')]: Boolean, default: false },
+    swarmValidationCode: { [schema.get('typeKey')]: String },
+    swarmMagicLinkCode: { [schema.get('typeKey')]: String },
+    swarmMagicLinkValidity: { [schema.get('typeKey')]: Number }
   })
 
   if (conf.password) schema.add({ swarmPassword: 'string' })
