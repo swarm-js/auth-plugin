@@ -478,10 +478,12 @@ export class Password {
   static changePassword () {
     return async function changePassword (request: any) {
       try {
-        const passwordValid = await Crypt.verify(
-          request.body.oldPassword,
-          request.user.swarmPassword
-        )
+        const passwordValid = request.user.swarmPassword
+          ? await Crypt.verify(
+              request.body.oldPassword,
+              request.user.swarmPassword
+            )
+          : true
         if (!passwordValid) throw new Unauthorized()
 
         request.user.swarmPassword = await Crypt.hash(request.body.newPassword)
