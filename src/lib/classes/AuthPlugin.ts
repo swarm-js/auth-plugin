@@ -46,6 +46,7 @@ export class AuthPlugin {
       facebookClientSecret: '',
       facebookRedirect: '',
       allowedDomains: [],
+      sessionDuration: 3600,
       userAccess: () => [],
       ...options
     }

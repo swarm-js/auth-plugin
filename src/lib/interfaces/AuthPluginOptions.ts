@@ -19,5 +19,6 @@ export interface AuthPluginOptions extends MongooseAuthPluginOptions {
   avatarField: string
   googleAuthenticatorService: string
   allowedDomains: string[]
+  sessionDuration: number
   userAccess: (req: any) => string | string[]
 }

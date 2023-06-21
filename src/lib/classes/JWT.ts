@@ -8,7 +8,7 @@ export class JWT {
     totpNeeded: boolean = false,
     validationRequired: boolean = false
   ) {
-    const exp = Math.floor(Date.now() / 1000) + 3600
+    const exp = Math.floor(Date.now() / 1000) + conf.sessionDuration
 
     return jwt.sign(
       {
