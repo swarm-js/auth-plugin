@@ -33,6 +33,7 @@ export class AuthPlugin {
       facebook: false,
       google: false,
       ethereum: false,
+      register: true,
       emailField: 'email',
       firstnameField: 'firstname',
       lastnameField: 'lastname',

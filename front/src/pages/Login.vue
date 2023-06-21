@@ -114,7 +114,7 @@
       >
         {{ $t('login.button') }}
       </button>
-      <div class="more">
+      <div class="more" v-if="conf.register">
         {{ $t('login.registerPrompt') }}
         <a
           :href="

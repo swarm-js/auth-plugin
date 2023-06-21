@@ -108,6 +108,8 @@ export class Facebook {
         return
       }
 
+      if (!conf.register) throw new Error('Cannot register')
+
       existingUser = await conf.model.create({
         [conf.emailField]: ret.email,
         [conf.firstnameField]: ret.firstname,

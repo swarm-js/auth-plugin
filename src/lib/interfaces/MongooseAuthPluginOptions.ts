@@ -10,4 +10,5 @@ export interface MongooseAuthPluginOptions {
   logo: string | null
   rpName: null | string
   prefix: string
+  register: boolean
 }

@@ -109,6 +109,8 @@ Request ID : ${requestId}`
         }
       }
 
+      if (!conf.register) throw new Error('Cannot register')
+
       user = await conf.model.create({
         swarmEthereumWallet: address.toLowerCase()
       })

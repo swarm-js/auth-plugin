@@ -111,6 +111,10 @@ if (!redirect) {
   }
 }
 
+if (!conf.register)
+  window.location.href =
+    conf.prefix + '/login?redirect=' + encodeURIComponent(redirect)
+
 loading.value = false
 
 const form = reactive({ email: '', password: '', passwordConfirm: '' })

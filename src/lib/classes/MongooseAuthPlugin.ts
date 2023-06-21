@@ -19,6 +19,7 @@ export function MongooseAuthPlugin (
     logo: null,
     rpName: '',
     prefix: '/auth',
+    register: true,
     ...options
   }
 

@@ -9,82 +9,83 @@ export class Password {
   static setup (swarm: any, conf: AuthPluginOptions) {
     if (!conf.password) return
 
-    swarm.controllers.addMethod(
-      conf.controllerName,
-      Password.register(swarm, conf),
-      {
-        method: 'POST',
-        route: '/register',
-        title: 'Create an account with email / password',
-        accepts: {
-          mimeType: 'application/json',
-          schema: {
-            type: 'object',
-            properties: {
-              email: {
-                type: 'string',
-                format: 'email',
-                description: 'Email address'
+    if (conf.register)
+      swarm.controllers.addMethod(
+        conf.controllerName,
+        Password.register(swarm, conf),
+        {
+          method: 'POST',
+          route: '/register',
+          title: 'Create an account with email / password',
+          accepts: {
+            mimeType: 'application/json',
+            schema: {
+              type: 'object',
+              properties: {
+                email: {
+                  type: 'string',
+                  format: 'email',
+                  description: 'Email address'
+                },
+                password: {
+                  type: 'string',
+                  minLength: 6,
+                  description: 'Password'
+                },
+                redirect: {
+                  type: 'string',
+                  description: 'Redirection URL after confirming the email'
+                }
               },
-              password: {
-                type: 'string',
-                minLength: 6,
-                description: 'Password'
-              },
-              redirect: {
-                type: 'string',
-                description: 'Redirection URL after confirming the email'
+              required: ['email', 'password']
+            }
+          },
+          returns: [
+            {
+              code: 201,
+              description: 'JWT token',
+              mimeType: 'application/json',
+              schema: {
+                type: 'object',
+                properties: {
+                  token: { type: 'string' },
+                  validationRequired: { type: 'boolean' }
+                }
               }
             },
-            required: ['email', 'password']
-          }
-        },
-        returns: [
-          {
-            code: 201,
-            description: 'JWT token',
-            mimeType: 'application/json',
-            schema: {
-              type: 'object',
-              properties: {
-                token: { type: 'string' },
-                validationRequired: { type: 'boolean' }
+            {
+              code: 400,
+              description: 'Password not secure enough',
+              mimeType: 'application/json',
+              schema: {
+                type: 'object',
+                properties: {
+                  statusCode: { type: 'number' },
+                  code: { type: 'string' },
+                  error: { type: 'string' },
+                  message: { type: 'string' },
+                  time: { type: 'string' }
+                }
+              }
+            },
+            {
+              code: 409,
+              description: 'Email already used',
+              mimeType: 'application/json',
+              schema: {
+                type: 'object',
+                properties: {
+                  statusCode: { type: 'number' },
+                  code: { type: 'string' },
+                  error: { type: 'string' },
+                  message: { type: 'string' },
+                  time: { type: 'string' }
+                }
               }
             }
-          },
-          {
-            code: 400,
-            description: 'Password not secure enough',
-            mimeType: 'application/json',
-            schema: {
-              type: 'object',
-              properties: {
-                statusCode: { type: 'number' },
-                code: { type: 'string' },
-                error: { type: 'string' },
-                message: { type: 'string' },
-                time: { type: 'string' }
-              }
-            }
-          },
-          {
-            code: 409,
-            description: 'Email already used',
-            mimeType: 'application/json',
-            schema: {
-              type: 'object',
-              properties: {
-                statusCode: { type: 'number' },
-                code: { type: 'string' },
-                error: { type: 'string' },
-                message: { type: 'string' },
-                time: { type: 'string' }
-              }
-            }
-          }
-        ]
-      }
-    )
+          ]
+        }
+      )
 
     swarm.controllers.addMethod(
       conf.controllerName,
