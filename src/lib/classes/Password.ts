@@ -1,5 +1,5 @@
 import { AuthPluginOptions } from '../interfaces/AuthPluginOptions'
-import { Unauthorized, Conflict, BadRequest } from 'http-errors'
+import { Forbidden, Conflict, BadRequest } from 'http-errors'
 import { Crypt } from './Crypt'
 import { JWT } from './JWT'
 import { v4 as uuid } from 'uuid'
@@ -333,7 +333,7 @@ export class Password {
       const user = await conf.model.findOne({
         swarmInvitationCode: request.body.code
       })
-      if (!user) throw new Unauthorized()
+      if (!user) throw new Forbidden()
 
       user.swarmPassword = await Crypt.hash(request.body.password)
       user.swarmInvited = false
@@ -439,14 +439,14 @@ export class Password {
         [conf.emailField]: request.body.email
       })
 
-      if (!user) throw Unauthorized()
+      if (!user) throw Forbidden()
 
       try {
         const passwordValid = await Crypt.verify(
           request.body.password,
           user.swarmPassword
         )
-        if (!passwordValid) throw new Unauthorized()
+        if (!passwordValid) throw new Forbidden()
 
         let totpNeeded = false
         if (
@@ -470,7 +470,7 @@ export class Password {
             !user.swarmGoogleAuthenticatorPending
         }
       } catch {
-        throw new Unauthorized()
+        throw new Forbidden()
       }
     }
   }
@@ -484,14 +484,14 @@ export class Password {
               request.user.swarmPassword
             )
           : true
-        if (!passwordValid) throw new Unauthorized()
+        if (!passwordValid) throw new Forbidden()
 
         request.user.swarmPassword = await Crypt.hash(request.body.newPassword)
         await request.user.save()
 
         return { status: true }
       } catch {
-        throw new Unauthorized()
+        throw new Forbidden()
       }
     }
   }
@@ -586,7 +586,7 @@ export class Password {
           (conf.allowedDomains ?? []).length &&
           (conf.allowedDomains ?? []).includes(redirect.host) === false
         )
-          throw new Unauthorized()
+          throw new Forbidden()
 
         redirect.searchParams.set('token', token)
       }

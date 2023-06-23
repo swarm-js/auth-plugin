@@ -1,6 +1,6 @@
 import { AuthPluginOptions } from '../interfaces/AuthPluginOptions'
 import { authenticator } from 'otplib'
-import { BadRequest, Unauthorized } from 'http-errors'
+import { BadRequest, Forbidden } from 'http-errors'
 import qrcode from 'qrcode'
 import { JWT } from './JWT'
 
@@ -258,9 +258,9 @@ export class GoogleAuthenticator {
           token: req.body.code,
           secret: req.user.swarmGoogleAuthenticatorSecret
         })
-        if (!isValid) throw new Unauthorized()
+        if (!isValid) throw new Forbidden()
       } catch (err: any) {
-        throw new Unauthorized()
+        throw new Forbidden()
       }
 
       req.user.swarmGoogleAuthenticatorPending = false
@@ -285,9 +285,9 @@ export class GoogleAuthenticator {
           req.body.code,
           req.user.swarmGoogleAuthenticatorSecret
         )
-        if (!isValid) throw new Unauthorized()
+        if (!isValid) throw new Forbidden()
       } catch {
-        throw new Unauthorized()
+        throw new Forbidden()
       }
 
       return {

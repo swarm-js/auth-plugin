@@ -5,7 +5,7 @@ import {
   Fido2Lib
 } from 'fido2-lib'
 import { v4 as uuid } from 'uuid'
-import { NotFound, Unauthorized } from 'http-errors'
+import { NotFound, Forbidden } from 'http-errors'
 import base64url from 'base64url'
 import { JWT } from './JWT'
 
@@ -320,8 +320,9 @@ export class Fido2 {
         await request.user.save()
 
         return { status: true }
-      } catch {
-        throw new Unauthorized()
+      } catch (err: any) {
+        console.log(err.message)
+        throw new Forbidden()
       }
     }
   }
@@ -366,7 +367,7 @@ export class Fido2 {
       const challenge = new Uint8Array(_this.authChallenge).buffer
 
       if (_this.publicKey === 'undefined' || _this.prevCounter === undefined) {
-        return false
+        throw new Forbidden()
       } else {
         const assertionExpectations: ExpectedAssertionResult = {
           challenge: challenge.toString(),
@@ -381,7 +382,7 @@ export class Fido2 {
           await fido.assertionResult(credential, assertionExpectations)
           return { status: true }
         } catch {
-          throw new Unauthorized()
+          throw new Forbidden()
         }
       }
     }
@@ -408,7 +409,7 @@ export class Fido2 {
       const challenge = new Uint8Array(_this.authChallenge).buffer
 
       if (_this.publicKey === 'undefined' || _this.prevCounter === undefined) {
-        return false
+        throw new Forbidden()
       } else {
         const assertionExpectations: ExpectedAssertionResult = {
           challenge: challenge.toString(),
@@ -426,7 +427,7 @@ export class Fido2 {
             validationRequired: !user.swarmValidated && conf.validationRequired
           }
         } catch {
-          throw new Unauthorized()
+          throw new Forbidden()
         }
       }
     }

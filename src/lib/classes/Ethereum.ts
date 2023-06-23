@@ -1,6 +1,6 @@
 import { AuthPluginOptions } from '../interfaces/AuthPluginOptions'
 import { v4 as uuid } from 'uuid'
-import { BadRequest, Unauthorized } from 'http-errors'
+import { BadRequest, Forbidden } from 'http-errors'
 import { JWT } from './JWT'
 import { verifyMessage } from 'ethers'
 
@@ -97,7 +97,7 @@ Request ID : ${requestId}`
       delete nonces[requestId]
 
       if (signerAddress.toLowerCase() !== address.toLowerCase())
-        throw new Unauthorized()
+        throw new Forbidden()
 
       let user = await conf.model.findOne({
         swarmEthereumWallet: address
