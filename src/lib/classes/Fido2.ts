@@ -257,6 +257,8 @@ export class Fido2 {
         deviceName: request.body.deviceName,
         challenge: Buffer.from(registrationOptions.challenge)
       })
+      request.user.markModified('swarmFido2Credentials')
+      await request.user.save()
 
       registrationOptions.user.id = id
       registrationOptions.user.name = request.user[conf.emailField]
@@ -314,7 +316,7 @@ export class Fido2 {
             }
             return c
           })
-
+        request.user.markModified('swarmFido2Credentials')
         await request.user.save()
 
         return { status: true }
