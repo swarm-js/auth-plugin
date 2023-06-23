@@ -297,7 +297,7 @@ export class Fido2 {
       )
 
       const attestationExpectations: ExpectedAttestationResult = {
-        challenge: challenge.toString(),
+        challenge: (challenge as Buffer).toString('base64url'),
         origin: conf.origin as string,
         factor: 'either'
       }
