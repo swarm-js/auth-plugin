@@ -179,7 +179,7 @@ export async function loginFido (api) {
         }
       }
     })
-    return response.jwt
+    return response.token
   } catch (e) {
     console.error('authentication failed', e)
 

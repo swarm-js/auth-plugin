@@ -9,7 +9,7 @@ export function joinUrl (baseUrl: string, ...paths: string[]): string | null {
 }
 export function getHost (baseUrl: string): string | null {
   try {
-    return new URL(baseUrl).host
+    return new URL(baseUrl).hostname
   } catch {
     return null
   }

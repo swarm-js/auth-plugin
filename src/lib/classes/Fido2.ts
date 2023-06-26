@@ -297,7 +297,7 @@ export class Fido2 {
       )
 
       const attestationExpectations: ExpectedAttestationResult = {
-        challenge: (challenge as Buffer).toString('base64url'),
+        challenge: Buffer.from(challenge).toString('base64url'),
         origin: conf.origin as string,
         factor: 'either'
       }
@@ -370,7 +370,7 @@ export class Fido2 {
         throw new Forbidden()
       } else {
         const assertionExpectations: ExpectedAssertionResult = {
-          challenge: challenge.toString(),
+          challenge: Buffer.from(challenge).toString('base64url'),
           origin: conf.origin as string,
           factor: 'either',
           publicKey: _this.publicKey,
@@ -412,7 +412,7 @@ export class Fido2 {
         throw new Forbidden()
       } else {
         const assertionExpectations: ExpectedAssertionResult = {
-          challenge: challenge.toString(),
+          challenge: Buffer.from(challenge).toString('base64url'),
           origin: conf.origin as string,
           factor: 'either',
           publicKey: _this.publicKey,

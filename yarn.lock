@@ -505,9 +505,9 @@
   integrity sha512-J8TOSBq3SoZbDhM9+R/u77hP93gz/rajSA+K2kGyijPpORPWUXHUpTaleoj+92As0S9uPRP7Oi8IqMf0u+ro6A==
 
 "@fastify/error@^3.2.0":
-  version "3.2.1"
-  resolved "https://registry.yarnpkg.com/@fastify/error/-/error-3.2.1.tgz#5d1cb182a8bb9b103c556b0da35fd77f319fc15e"
-  integrity sha512-scZVbcpPNWw/yyFmzzO7cf1daTeJp53spN2n7dBTHZd+cV7791fcWJCPP1Tfhdbre+8vDiCyQyqqXfQnYMntYQ==
+  version "3.3.0"
+  resolved "https://registry.yarnpkg.com/@fastify/error/-/error-3.3.0.tgz#eba790082e1144bfc8def0c2c8ef350064bc537b"
+  integrity sha512-dj7vjIn1Ar8sVXj2yAXiMNCJDmS9MQ9XMlIecX2dIzzhjSHCyKo4DdXjXMs7wKW2kj6yvVRSpuQjOZ3YLrh56w==
 
 "@fastify/fast-json-stringify-compiler@^4.3.0":
   version "4.3.0"
@@ -843,9 +843,9 @@
   integrity sha512-9NET910DNaIPngYnLLPeg+Ogzqsi9uM4mSboU5y6p8S5DzMTVEsJZrawi+BoDNUVBa2DhJqQYUFvMDfgU062LQ==
 
 "@swarmjs/core@^1.0.2":
-  version "1.2.1"
-  resolved "https://registry.yarnpkg.com/@swarmjs/core/-/core-1.2.1.tgz#dd7982a997f41472593834082c673a55886bd1ad"
-  integrity sha512-nEdwNwv5G5K8mPYEIlil2nEiqqIweaG1E3h00k4FJNKga5fwt+l4OgXYEzpCCjd4i29BMV5OZVPstKW/msjg9g==
+  version "1.3.0"
+  resolved "https://registry.yarnpkg.com/@swarmjs/core/-/core-1.3.0.tgz#f3d92352cae73c2c29a89a24bb5c3df786287943"
+  integrity sha512-tOGrIbnk2OMM9TilYNItpg7gPTj0Y1CecJj+JVYf27qNtf7+Cj9Y6S7cdcl/aWBDWmc4vr6sMknsOezIAiiIjg==
   dependencies:
     "@types/http-errors" "^2.0.1"
     fastify "^4.13.0"
@@ -5407,9 +5407,9 @@ pino-abstract-transport@v1.0.0:
     split2 "^4.0.0"
 
 pino-std-serializers@^6.0.0:
-  version "6.2.1"
-  resolved "https://registry.yarnpkg.com/pino-std-serializers/-/pino-std-serializers-6.2.1.tgz#369f4ae2a19eb6d769ddf2c88a2164b76879a284"
-  integrity sha512-wHuWB+CvSVb2XqXM0W/WOYUkVSPbiJb9S5fNB7TBhd8s892Xq910bRxwHtC4l71hgztObTjXL6ZheZXFjhDrDQ==
+  version "6.2.2"
+  resolved "https://registry.yarnpkg.com/pino-std-serializers/-/pino-std-serializers-6.2.2.tgz#d9a9b5f2b9a402486a5fc4db0a737570a860aab3"
+  integrity sha512-cHjPPsE+vhj/tnhCy/wiMh3M3z3h/j15zHQX+S9GkTBgqJuTuJzYJ4gUyACLhDaJ7kk9ba9iRDmbH2tJU03OiA==
 
 pino@^8.12.0:
   version "8.14.1"
@@ -5956,9 +5956,9 @@ semver@^7.3.8:
     lru-cache "^6.0.0"
 
 semver@^7.5.0:
-  version "7.5.2"
-  resolved "https://registry.yarnpkg.com/semver/-/semver-7.5.2.tgz#5b851e66d1be07c1cdaf37dfc856f543325a2beb"
-  integrity sha512-SoftuTROv/cRjCze/scjGyiDtcUyxw1rgYQSZY7XTmtR5hX+dm76iDbTH8TkLPHCQmlbQVSSbNZCPM2hb0knnQ==
+  version "7.5.3"
+  resolved "https://registry.yarnpkg.com/semver/-/semver-7.5.3.tgz#161ce8c2c6b4b3bdca6caadc9fa3317a4c4fe88e"
+  integrity sha512-QBlUtyVk/5EeHbi7X0fw6liDZc7BBmEaSYn01fMU1OUYbf6GPsbTtd8WmnqbI20SeycoHSeiybkE/q1Q+qlThQ==
   dependencies:
     lru-cache "^6.0.0"
 
