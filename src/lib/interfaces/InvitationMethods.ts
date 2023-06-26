@@ -4,5 +4,5 @@ export interface InvitationMethods {
     email: string,
     redirect: string,
     preset: { [type: string]: any }
-  ): Promise<boolean>
+  ): Promise<any>
 }
