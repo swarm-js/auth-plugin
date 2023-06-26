@@ -64,22 +64,28 @@ export function MongooseAuthPlugin (
         request: any,
         email: string,
         redirect: string,
-        preset: { [key: string]: any } = {}
+        preset: { [key: string]: any } = {},
+        overwrite: boolean = false
       ) {
         email = email.trim().toLowerCase()
 
-        const existing = await this.findOne({
+        let user = await this.findOne({
           [conf.emailField]: email
         })
-        if (existing) throw new Conflict()
+        if (user && !overwrite) throw new Conflict()
+        if (!user)
+          user = await this.create({
+            [conf.emailField]: email,
+            swarmInvited: true,
+            swarmInvitationCode: uuid(),
+            swarmValidated: false,
+            ...preset
+          })
+        else
+          for (let key in preset) {
+            user.set(key, preset[key])
+          }
 
-        const user = await this.create({
-          [conf.emailField]: email,
-          swarmInvited: true,
-          swarmInvitationCode: uuid(),
-          swarmValidated: false,
-          ...preset
-        })
         if (user.sendEmail === undefined)
           throw new Error(
             'Cannot send email, no email provider has been installed'

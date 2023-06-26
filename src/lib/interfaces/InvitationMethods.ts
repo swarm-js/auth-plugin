@@ -3,6 +3,7 @@ export interface InvitationMethods {
     request: any,
     email: string,
     redirect: string,
-    preset: { [type: string]: any }
+    preset?: { [type: string]: any },
+    overwrite?: boolean
   ): Promise<any>
 }
