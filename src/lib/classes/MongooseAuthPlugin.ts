@@ -1,6 +1,6 @@
 import { MongooseAuthPluginOptions } from '../interfaces/MongooseAuthPluginOptions'
 import { v4 as uuid } from 'uuid'
-import { Conflict } from 'http-errors'
+import { Conflict, InternalServerError } from 'http-errors'
 import { Mail } from '@swarmjs/mail'
 
 export function MongooseAuthPlugin (
@@ -128,7 +128,7 @@ export function MongooseAuthPlugin (
           )
           .end()
 
-        return await user.sendEmail(
+        const sent = await user.sendEmail(
           request.$t(
             `You have been invited to {name} !`,
             {
@@ -139,6 +139,10 @@ export function MongooseAuthPlugin (
           ),
           html
         )
+
+        if (!sent) throw new InternalServerError()
+
+        return user
       }
     )
   }
