@@ -48,10 +48,6 @@ export class Fido2 {
             properties: {
               deviceName: {
                 type: 'string'
-              },
-              registrationOptions: {
-                type: 'object',
-                additionalProperties: true
               }
             }
           }
@@ -66,6 +62,10 @@ export class Fido2 {
                 cred: {
                   type: 'string',
                   format: 'uuid'
+                },
+                registrationOptions: {
+                  type: 'object',
+                  additionalProperties: true
                 }
               }
             }
@@ -144,6 +144,16 @@ export class Fido2 {
             name: 'id',
             description: 'Credential ID',
             schema: { type: 'string', format: 'uuid' }
+          }
+        ],
+        returns: [
+          {
+            code: 200,
+            description: 'Auth options for FIDO, browser side',
+            schema: {
+              type: 'object',
+              additionalProperties: true
+            }
           }
         ]
       }
