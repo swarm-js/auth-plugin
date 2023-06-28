@@ -84,6 +84,14 @@ export class AuthPlugin {
       return null
     })
 
+    // Handle decorators
+    swarm.appendOption('injectors', {
+      name: 'auth-plugin:user',
+      getValue (req: any) {
+        return req.user
+      }
+    })
+
     if (conf.fido2 && (!conf.rpId || !conf.rpName || !conf.origin))
       throw new Error(
         'When using FIDO2, rpName, rpId and origin fields are required'
