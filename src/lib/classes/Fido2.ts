@@ -56,6 +56,7 @@ export class Fido2 {
           {
             code: 200,
             description: 'Auth parameters for FIDO, browser side',
+            mimeType: 'application/json',
             schema: {
               type: 'object',
               properties: {
@@ -142,6 +143,7 @@ export class Fido2 {
           {
             code: 200,
             description: 'The user correctly authenticated himself with FIDO2',
+            mimeType: 'application/json',
             schema: {
               type: 'object',
               properties: {
@@ -152,6 +154,7 @@ export class Fido2 {
           {
             code: 403,
             description: 'Wrong credentials',
+            mimeType: 'application/json',
             schema: {
               type: 'object',
               properties: {
@@ -166,6 +169,7 @@ export class Fido2 {
           {
             code: 404,
             description: 'Credentials not found',
+            mimeType: 'application/json',
             schema: {
               type: 'object',
               properties: {
@@ -199,6 +203,7 @@ export class Fido2 {
           {
             code: 200,
             description: 'Auth options for FIDO, browser side',
+            mimeType: 'application/json',
             schema: {
               type: 'object',
               properties: {
@@ -241,6 +246,7 @@ export class Fido2 {
           {
             code: 200,
             description: 'The user correctly authenticated himself with FIDO2',
+            mimeType: 'application/json',
             schema: {
               type: 'object',
               properties: {
@@ -251,6 +257,7 @@ export class Fido2 {
           {
             code: 403,
             description: 'Wrong credentials',
+            mimeType: 'application/json',
             schema: {
               type: 'object',
               properties: {
@@ -265,6 +272,7 @@ export class Fido2 {
           {
             code: 404,
             description: 'Credentials not found',
+            mimeType: 'application/json',
             schema: {
               type: 'object',
               properties: {
@@ -298,6 +306,7 @@ export class Fido2 {
           {
             code: 200,
             description: 'JWT token',
+            mimeType: 'application/json',
             schema: {
               type: 'object',
               properties: {
@@ -309,6 +318,7 @@ export class Fido2 {
           {
             code: 403,
             description: 'Wrong credentials',
+            mimeType: 'application/json',
             schema: {
               type: 'object',
               properties: {
@@ -323,6 +333,7 @@ export class Fido2 {
           {
             code: 404,
             description: 'Credentials not found',
+            mimeType: 'application/json',
             schema: {
               type: 'object',
               properties: {

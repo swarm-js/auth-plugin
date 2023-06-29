@@ -31,6 +31,13 @@ export class Facebook {
             description: 'URL where redirect the user after a successful login',
             schema: { type: 'string', format: 'uri' }
           }
+        ],
+        returns: [
+          {
+            code: 302,
+            description: 'The user is redirected',
+            mimeType: 'application/json'
+          }
         ]
       }
     )
@@ -52,6 +59,13 @@ export class Facebook {
             name: 'state',
             description: 'Auth request state in JSON format',
             schema: { type: 'string' }
+          }
+        ],
+        returns: [
+          {
+            code: 302,
+            description: 'The user is redirected',
+            mimeType: 'application/json'
           }
         ]
       }

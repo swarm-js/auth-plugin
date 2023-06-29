@@ -266,6 +266,13 @@ export class Password {
               type: 'string'
             }
           }
+        ],
+        returns: [
+          {
+            code: 302,
+            description: 'The user is redirected',
+            mimeType: 'application/json'
+          }
         ]
       }
     )
