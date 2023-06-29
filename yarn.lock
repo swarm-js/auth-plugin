@@ -843,9 +843,9 @@
   integrity sha512-9NET910DNaIPngYnLLPeg+Ogzqsi9uM4mSboU5y6p8S5DzMTVEsJZrawi+BoDNUVBa2DhJqQYUFvMDfgU062LQ==
 
 "@swarmjs/core@^1.0.2":
-  version "1.3.0"
-  resolved "https://registry.yarnpkg.com/@swarmjs/core/-/core-1.3.0.tgz#f3d92352cae73c2c29a89a24bb5c3df786287943"
-  integrity sha512-tOGrIbnk2OMM9TilYNItpg7gPTj0Y1CecJj+JVYf27qNtf7+Cj9Y6S7cdcl/aWBDWmc4vr6sMknsOezIAiiIjg==
+  version "1.4.5"
+  resolved "https://registry.yarnpkg.com/@swarmjs/core/-/core-1.4.5.tgz#42ba46c0a1a14d46afbc837b918da437eeb32dc1"
+  integrity sha512-VopBUFCid/yoIYary6uWgnmR+RizJ3huKGpVKlw2vlNv5ZUg14naqwI4rIp0OO/lPRCYyVw/mHevVHysljiqQA==
   dependencies:
     "@types/http-errors" "^2.0.1"
     fastify "^4.13.0"

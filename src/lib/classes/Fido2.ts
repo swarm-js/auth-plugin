@@ -65,7 +65,56 @@ export class Fido2 {
                 },
                 registrationOptions: {
                   type: 'object',
-                  additionalProperties: true
+                  properties: {
+                    attestation: { type: 'string' },
+                    authenticatorSelection: {
+                      type: 'object',
+                      properties: {
+                        authenticatorAttachment: { type: 'string' },
+                        requireResidentKey: { type: 'boolean' },
+                        userVerification: { type: 'string' }
+                      }
+                    },
+                    challenge: {
+                      type: 'object',
+                      properties: {
+                        type: { type: 'string' },
+                        data: {
+                          type: 'array',
+                          items: {
+                            type: 'number'
+                          }
+                        }
+                      }
+                    },
+                    pubKeyCredParams: {
+                      type: 'array',
+                      items: {
+                        type: 'object',
+                        properties: {
+                          type: { type: 'string' },
+                          alg: { type: 'number' }
+                        }
+                      }
+                    },
+                    rp: {
+                      type: 'object',
+                      properties: {
+                        id: { type: 'string' },
+                        name: { type: 'string' },
+                        icon: { type: 'string' }
+                      }
+                    },
+                    timeout: { type: 'number' },
+                    user: {
+                      type: 'object',
+                      properties: {
+                        id: { type: 'string' },
+                        name: { type: 'string' },
+                        displayName: { type: 'string' }
+                      }
+                    }
+                  }
                 }
               }
             }
@@ -152,7 +201,21 @@ export class Fido2 {
             description: 'Auth options for FIDO, browser side',
             schema: {
               type: 'object',
-              additionalProperties: true
+              properties: {
+                challenge: {
+                  type: 'object',
+                  properties: {
+                    type: { type: 'string' },
+                    data: {
+                      type: 'array',
+                      items: { type: 'number' }
+                    }
+                  }
+                },
+                rpId: { type: 'string' },
+                timeout: { type: 'number' },
+                userVerification: { type: 'string' }
+              }
             }
           }
         ]
