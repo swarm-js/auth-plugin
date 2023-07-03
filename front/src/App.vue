@@ -49,7 +49,10 @@ const page = window.AuthPluginPage ?? 'login'
     <div class="modal">
       <div
         class="logo"
-        :style="{ backgroundImage: `url(${conf.logo})` }"
+        :style="{
+          backgroundImage: `url(${conf.logo})`,
+          backgroundColor: conf.logoBackgroundColor
+        }"
         v-if="(conf.logo ?? '').length"
       ></div>
       <PageLogin v-if="page === 'login'" :conf="conf" />

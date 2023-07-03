@@ -4,6 +4,7 @@ export interface AuthPluginOptions extends MongooseAuthPluginOptions {
   controllerName: string
   jwtKey: string
   themeColor: string
+  logoBackgroundColor: string
   rpId: null | string
   origin: null | string
   model: any

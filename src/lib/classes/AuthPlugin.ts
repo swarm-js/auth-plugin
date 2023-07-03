@@ -24,6 +24,7 @@ export class AuthPlugin {
       validationRequired: false,
       logo: null,
       themeColor: '#8500d2',
+      logoBackgroundColor: 'transparent',
       rpName: instance.getOption('title') ?? 'AuthPlugin',
       rpId: null,
       origin: null,
