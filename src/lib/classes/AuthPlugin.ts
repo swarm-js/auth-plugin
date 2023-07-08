@@ -50,6 +50,7 @@ export class AuthPlugin {
       allowedDomains: [],
       sessionDuration: 3600,
       userAccess: () => [],
+      onLogin: async () => {},
       ...options
     }
 

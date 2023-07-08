@@ -104,6 +104,7 @@ Request ID : ${requestId}`
       })
 
       if (user) {
+        await conf.onLogin(user)
         return {
           token: JWT.generate(conf, user)
         }
@@ -115,6 +116,7 @@ Request ID : ${requestId}`
         swarmEthereumWallet: address.toLowerCase()
       })
 
+      await conf.onLogin(user)
       return {
         token: JWT.generate(conf, user)
       }

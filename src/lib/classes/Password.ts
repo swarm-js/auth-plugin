@@ -348,6 +348,7 @@ export class Password {
       user.swarmValidated = true
       await user.save()
 
+      await conf.onLogin(user)
       return {
         token: JWT.generate(conf, user, false, false)
       }
@@ -381,6 +382,7 @@ export class Password {
         )
       }
 
+      await conf.onLogin(user)
       return {
         token: JWT.generate(conf, user, false, conf.validationRequired),
         validationRequired: conf.validationRequired
@@ -463,6 +465,7 @@ export class Password {
         )
           totpNeeded = true
 
+        await conf.onLogin(user)
         return {
           token: JWT.generate(
             conf,
@@ -582,6 +585,7 @@ export class Password {
         user.swarmMagicLinkCode = ''
         await user.save()
 
+        await conf.onLogin(user)
         const token = JWT.generate(
           conf,
           user,

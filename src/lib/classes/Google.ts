@@ -91,6 +91,7 @@ export class Google {
       })
 
       if (existingUser) {
+        await conf.onLogin(existingUser)
         reply.redirect(
           302,
           Google.buildRedirectUrl(conf, {
@@ -108,6 +109,7 @@ export class Google {
         existingUser.swarmGoogleId = ret.id
         existingUser.swarmValidated = true
         await existingUser.save()
+        await conf.onLogin(existingUser)
         reply.redirect(
           302,
           Google.buildRedirectUrl(conf, {
@@ -129,6 +131,7 @@ export class Google {
         swarmValidated: true
       })
 
+      await conf.onLogin(existingUser)
       reply.redirect(
         302,
         Google.buildRedirectUrl(conf, {

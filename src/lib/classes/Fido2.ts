@@ -525,6 +525,7 @@ export class Fido2 {
 
         try {
           await fido.assertionResult(credential, assertionExpectations)
+          await conf.onLogin(user)
           return {
             token: JWT.generate(conf, user, false, !user.swarmValidated),
             validationRequired: !user.swarmValidated && conf.validationRequired

@@ -95,6 +95,7 @@ export class Facebook {
       })
 
       if (existingUser) {
+        await conf.onLogin(existingUser)
         reply.redirect(
           302,
           Facebook.buildRedirectUrl(conf, {
@@ -112,6 +113,7 @@ export class Facebook {
         existingUser.swarmFacebookId = ret.id
         existingUser.swarmValidated = true
         await existingUser.save()
+        await conf.onLogin(existingUser)
         reply.redirect(
           302,
           Facebook.buildRedirectUrl(conf, {
@@ -133,6 +135,7 @@ export class Facebook {
         swarmValidated: true
       })
 
+      await conf.onLogin(existingUser)
       reply.redirect(
         302,
         Facebook.buildRedirectUrl(conf, {

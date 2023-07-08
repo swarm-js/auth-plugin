@@ -22,4 +22,5 @@ export interface AuthPluginOptions extends MongooseAuthPluginOptions {
   allowedDomains: string[]
   sessionDuration: number
   userAccess: (req: any) => string | string[]
+  onLogin: (user: any) => Promise<void>
 }
