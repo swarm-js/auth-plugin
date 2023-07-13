@@ -6,6 +6,7 @@ import { Fido2 } from './Fido2'
 import { Google } from './Google'
 import { GoogleAuthenticator } from './GoogleAuthenticator'
 import { Password } from './Password'
+import { Session } from './Session'
 import { UI } from './UI'
 import { getHost, getOrigin } from './utils'
 
@@ -114,6 +115,7 @@ export class AuthPlugin {
     Facebook.setup(swarm, conf)
     Google.setup(swarm, conf)
     Ethereum.setup(swarm, conf)
+    Session.setup(swarm, conf)
 
     swarm.i18n.addTranslations(
       {
