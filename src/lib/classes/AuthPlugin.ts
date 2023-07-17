@@ -55,6 +55,7 @@ export class AuthPlugin {
       ...options
     }
 
+    conf.allowedDomains.push(getHost(instance.getOption('baseUrl')) ?? '')
     if (!conf.rpId) conf.rpId = getHost(instance.getOption('baseUrl'))
     if (!conf.origin) conf.origin = getOrigin(instance.getOption('baseUrl'))
 
