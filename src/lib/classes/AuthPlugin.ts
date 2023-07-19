@@ -8,7 +8,7 @@ import { GoogleAuthenticator } from './GoogleAuthenticator'
 import { Password } from './Password'
 import { Session } from './Session'
 import { UI } from './UI'
-import { getHost, getOrigin } from './utils'
+import { getHost, getHostname, getOrigin } from './utils'
 
 let swarm: any
 let conf: AuthPluginOptions
@@ -56,7 +56,7 @@ export class AuthPlugin {
     }
 
     conf.allowedDomains.push(getHost(instance.getOption('baseUrl')) ?? '')
-    if (!conf.rpId) conf.rpId = getHost(instance.getOption('baseUrl'))
+    if (!conf.rpId) conf.rpId = getHostname(instance.getOption('baseUrl'))
     if (!conf.origin) conf.origin = getOrigin(instance.getOption('baseUrl'))
 
     if (conf.model === null) throw new Error('Mongoose model is not defined')
