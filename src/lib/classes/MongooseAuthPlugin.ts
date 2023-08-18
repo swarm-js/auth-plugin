@@ -81,10 +81,12 @@ export function MongooseAuthPlugin (
             swarmValidated: false,
             ...preset
           })
-        else
+        else {
           for (let key in preset) {
             user.set(key, preset[key])
           }
+          await user.save()
+        }
 
         if (user.sendEmail === undefined)
           throw new Error(
