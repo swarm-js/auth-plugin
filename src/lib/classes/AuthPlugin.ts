@@ -30,6 +30,7 @@ export class AuthPlugin {
       rpId: null,
       origin: null,
       password: true,
+      requireOldPasswordForUpdate: true,
       invite: false,
       fido2: false,
       facebook: false,

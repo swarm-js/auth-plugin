@@ -148,7 +148,7 @@ export class Password {
 
     swarm.controllers.addMethod(
       conf.controllerName,
-      Password.changePassword(),
+      Password.changePassword(swarm, conf),
       {
         method: 'PUT',
         route: '/password',
@@ -168,7 +168,7 @@ export class Password {
                 description: 'Old password'
               }
             },
-            required: ['newPassword', 'oldPassword']
+            required: ['newPassword']
           }
         },
         returns: [
@@ -485,15 +485,16 @@ export class Password {
     }
   }
 
-  static changePassword () {
+  static changePassword (_: any, conf: AuthPluginOptions) {
     return async function changePassword (request: any) {
       try {
-        const passwordValid = request.user.swarmPassword
-          ? await Crypt.verify(
-              request.body.oldPassword,
-              request.user.swarmPassword
-            )
-          : true
+        const passwordValid =
+          conf.requireOldPasswordForUpdate && request.user.swarmPassword
+            ? await Crypt.verify(
+                request.body.oldPassword,
+                request.user.swarmPassword
+              )
+            : true
         if (!passwordValid) throw new Forbidden()
 
         request.user.swarmPassword = await Crypt.hash(request.body.newPassword)
