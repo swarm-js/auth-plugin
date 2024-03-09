@@ -92,7 +92,7 @@ export class AuthPlugin {
 
     // Handle sockets
     if (swarm.onSocketConnection) {
-      swarm.onSocketConnection((socket: any) => {
+      swarm.onSocketConnection((socket: any, eventBus: any) => {
         try {
           const decoded: any = jwt.verify(
             socket.handshake.auth.token,
@@ -100,6 +100,7 @@ export class AuthPlugin {
           )
           socket.join(`user:${decoded.id}`)
           socket.data.userId = decoded.id
+          eventBus.emit('swarm:loggedIn', decoded.id)
         } catch {
           socket.disconnect(true)
         }
