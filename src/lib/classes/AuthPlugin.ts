@@ -9,6 +9,7 @@ import { Password } from './Password'
 import { Session } from './Session'
 import { UI } from './UI'
 import { getHost, getHostname, getOrigin } from './utils'
+import jwt from 'jsonwebtoken'
 
 let swarm: any
 let conf: AuthPluginOptions
@@ -88,6 +89,21 @@ export class AuthPlugin {
 
       return null
     })
+
+    // Handle sockets
+    if (swarm.onSocketConnection) {
+      swarm.onSocketConnection(async (socket: any) => {
+        try {
+          const decoded: any = jwt.verify(
+            socket.handshake.auth.token,
+            conf.jwtKey
+          )
+          socket.join(`user:${decoded.id}`)
+        } catch {
+          socket.disconnect(true)
+        }
+      })
+    }
 
     // Handle decorators
     swarm.appendOption('injectors', {
