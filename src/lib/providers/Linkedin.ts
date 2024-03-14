@@ -13,7 +13,7 @@ export class LinkedinProvider {
         redirect
       })
     )
-    url.searchParams.set('scope', 'r_liteprofile r_emailaddress')
+    url.searchParams.set('scope', 'openid profile email')
     return url.toString()
   }
 
