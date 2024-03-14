@@ -12,6 +12,7 @@ export function MongooseAuthPlugin (
     fido2: false,
     facebook: false,
     google: false,
+    linkedin: false,
     googleAuthenticator: false,
     ethereum: false,
     invite: false,
@@ -34,6 +35,7 @@ export function MongooseAuthPlugin (
   if (conf.password) schema.add({ swarmPassword: 'string' })
   if (conf.facebook) schema.add({ swarmFacebookId: 'string' })
   if (conf.google) schema.add({ swarmGoogleId: 'string' })
+  if (conf.linkedin) schema.add({ swarmLinkedinId: 'string' })
   if (conf.googleAuthenticator)
     schema.add({
       swarmGoogleAuthenticatorSecret: 'string',
