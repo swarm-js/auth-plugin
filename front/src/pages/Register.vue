@@ -16,6 +16,14 @@
     <div class="alert" v-if="registerError">{{ registerErrorMessage }}</div>
 
     <form @submit.native.prevent="tryregister" v-if="conf.password">
+      <label v-if="conf.askForName">
+        {{ $t('register.firstname') }}
+        <input type="text" v-model="form.firstname" />
+      </label>
+      <label v-if="conf.askForName">
+        {{ $t('register.lastname') }}
+        <input type="text" v-model="form.lastname" />
+      </label>
       <label>
         {{ $t('register.email') }}
         <input type="email" v-model="form.email" />
@@ -117,7 +125,13 @@ if (!conf.register)
 
 loading.value = false
 
-const form = reactive({ email: '', password: '', passwordConfirm: '' })
+const form = reactive({
+  email: '',
+  password: '',
+  passwordConfirm: '',
+  firstname: '',
+  lastname: ''
+})
 const displayOr =
   conf.password &&
   (conf.facebook || conf.google || conf.ethereum || conf.linkedin)
@@ -127,7 +141,8 @@ const allowregister = computed(_ => {
     form.email.length &&
     form.email.match(/^[A-Za-z0-9_!#$%&'*+\/=?`{|}~^.-]+@[A-Za-z0-9.-]+$/gm) &&
     form.password.length >= 6 &&
-    form.password === form.passwordConfirm
+    form.password === form.passwordConfirm &&
+    (!conf.askForName || (form.firstname.length && form.lastname.length))
   )
 })
 
@@ -143,7 +158,10 @@ async function tryregister() {
     const ret = await api.post(`/register`, {
       email: form.email,
       password: form.password,
-      redirect
+      redirect,
+      ...(conf.askForName
+        ? { firstname: form.firstname, lastname: form.lastname }
+        : {})
     })
     if (ret.validationRequired) {
       validationRequired.value = true

@@ -23,6 +23,8 @@ const conf = {
   password: true,
   fido2: false,
   facebook: false,
+  register: false,
+  askForName: false,
   google: false,
   linkedin: false,
   googleAuthenticator: false,

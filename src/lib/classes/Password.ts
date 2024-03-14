@@ -35,9 +35,25 @@ export class Password {
                 redirect: {
                   type: 'string',
                   description: 'Redirection URL after confirming the email'
-                }
+                },
+                ...(conf.askForName
+                  ? {
+                      firstname: {
+                        type: 'string',
+                        description: 'First name'
+                      },
+                      lastname: {
+                        type: 'string',
+                        description: 'Lastname name'
+                      }
+                    }
+                  : {})
               },
-              required: ['email', 'password']
+              required: [
+                'email',
+                'password',
+                ...(conf.askForName ? ['firstname', 'lastname'] : [])
+              ]
             }
           },
           returns: [
@@ -369,7 +385,13 @@ export class Password {
       const user = await conf.model.create({
         [conf.emailField]: request.body.email,
         swarmPassword,
-        swarmValidated: false
+        swarmValidated: false,
+        ...(conf.askForName
+          ? {
+              [conf.firstnameField]: request.body.firstname,
+              [conf.lastnameField]: request.body.lastname
+            }
+          : {})
       })
 
       if (conf.validationRequired) {

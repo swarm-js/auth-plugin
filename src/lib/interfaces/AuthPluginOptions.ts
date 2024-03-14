@@ -10,6 +10,7 @@ export interface AuthPluginOptions extends MongooseAuthPluginOptions {
   model: any
   validationRequired: boolean
   requireOldPasswordForUpdate: boolean
+  askForName: boolean
   googleClientId: string
   googleClientSecret: string
   googleRedirect: string

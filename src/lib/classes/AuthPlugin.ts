@@ -33,6 +33,7 @@ export class AuthPlugin {
       origin: null,
       password: true,
       requireOldPasswordForUpdate: true,
+      askForName: false,
       invite: false,
       fido2: false,
       facebook: false,

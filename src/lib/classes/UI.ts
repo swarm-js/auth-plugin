@@ -255,6 +255,7 @@ export class UI {
             rpName: conf.rpName,
             password: conf.password,
             register: conf.register,
+            askForName: conf.askForName,
             fido2: conf.fido2,
             facebook: conf.facebook,
             google: conf.google,

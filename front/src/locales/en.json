@@ -28,6 +28,8 @@
   },
   "register": {
     "title": "Register",
+    "firstname": "Firstname",
+    "lastname": "Lastname",
     "email": "Email address",
     "password": "Password",
     "passwordConfirm": "Confirm password",
