@@ -1,5 +1,6 @@
 import axios from 'axios'
 import qs from 'qs'
+import jwt from 'jsonwebtoken'
 
 export class LinkedinProvider {
   async getRedirectUri (conf: any, redirect: string | null = null) {
@@ -34,34 +35,23 @@ export class LinkedinProvider {
       }
     )
 
-    const me = await axios.get(
-      'https://api.linkedin.com/v2/me?projection=(id,localizedFirstName,localizedLastName,profilePicture(displayImage~:playableStreams))',
-      {
-        headers: {
-          Authorization: `Bearer ${token.data.access_token}`
-        }
-      }
-    )
+    const tokenData: any = jwt.decode(token.data.access_token)
+    console.log(tokenData)
 
-    const email = await axios.get(
-      'https://api.linkedin.com/v2/clientAwareMemberHandles?q=members&projection=(elements*(primary,type,handle~))',
-      {
-        headers: {
-          Authorization: `Bearer ${token.data.access_token}`
-        }
+    const me = await axios.get('https://api.linkedin.com/v2/userinfo', {
+      headers: {
+        Authorization: `Bearer ${token.data.access_token}`
       }
-    )
+    })
 
     const state = JSON.parse(query.state)
 
     return {
-      id: me.data.id,
-      email: email.data.elements?.[0]?.['handle~']?.emailAddress,
-      firstname: me.data.localizedFirstName,
-      lastname: me.data.localizedLastName,
-      avatar:
-        me.data.profilePicture?.['displayImage~'].elements?.[0].identifiers?.[0]
-          ?.identifier ?? '',
+      id: tokenData?.sub ?? '',
+      email: me.data.email ?? '',
+      firstname: me.data.given_name ?? '',
+      lastname: me.data.family_name ?? '',
+      avatar: me.data.picture ?? '',
       redirect: state.redirect
     }
   }
