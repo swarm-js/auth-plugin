@@ -6,7 +6,7 @@ export class LinkedinProvider {
     const url = new URL('https://www.linkedin.com/oauth/v2/authorization')
     url.searchParams.set('response_type', 'code')
     url.searchParams.set('client_id', conf.linkedinClientId)
-    url.searchParams.set('redirect_uri', conf.linkedinClientSecret)
+    url.searchParams.set('redirect_uri', conf.linkedinCallback)
     url.searchParams.set(
       'state',
       JSON.stringify({
