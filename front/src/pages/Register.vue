@@ -119,7 +119,8 @@ loading.value = false
 
 const form = reactive({ email: '', password: '', passwordConfirm: '' })
 const displayOr =
-  conf.password && (conf.facebook || conf.google || conf.ethereum)
+  conf.password &&
+  (conf.facebook || conf.google || conf.ethereum || conf.linkedin)
 
 const allowregister = computed(_ => {
   return (

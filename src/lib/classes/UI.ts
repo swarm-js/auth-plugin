@@ -258,6 +258,7 @@ export class UI {
             fido2: conf.fido2,
             facebook: conf.facebook,
             google: conf.google,
+            linkedin: conf.linkedin,
             googleAuthenticator: conf.googleAuthenticator,
             ethereum: conf.ethereum,
             allowedDomains: conf.allowedDomains

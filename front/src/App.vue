@@ -24,6 +24,7 @@ const conf = {
   fido2: false,
   facebook: false,
   google: false,
+  linkedin: false,
   googleAuthenticator: false,
   ethereum: false,
   ...(window.AuthPluginConf ?? {})

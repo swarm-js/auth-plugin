@@ -244,7 +244,8 @@ loading.value = false
 
 const form = reactive({ email: '', password: '' })
 const displayOr =
-  conf.password && (conf.facebook || conf.google || conf.ethereum)
+  conf.password &&
+  (conf.facebook || conf.google || conf.ethereum || conf.linkedin)
 
 const allowLogin = computed(_ => {
   return (
