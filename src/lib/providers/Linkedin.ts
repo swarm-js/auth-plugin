@@ -1,6 +1,5 @@
 import axios from 'axios'
 import qs from 'qs'
-import jwt from 'jsonwebtoken'
 
 export class LinkedinProvider {
   async getRedirectUri (conf: any, redirect: string | null = null) {
@@ -35,9 +34,6 @@ export class LinkedinProvider {
       }
     )
 
-    const tokenData: any = jwt.decode(token.data.access_token)
-    console.log(tokenData)
-
     const me = await axios.get('https://api.linkedin.com/v2/userinfo', {
       headers: {
         Authorization: `Bearer ${token.data.access_token}`
@@ -47,7 +43,7 @@ export class LinkedinProvider {
     const state = JSON.parse(query.state)
 
     return {
-      id: tokenData?.sub ?? '',
+      id: me.data.sub,
       email: me.data.email ?? '',
       firstname: me.data.given_name ?? '',
       lastname: me.data.family_name ?? '',
