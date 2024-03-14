@@ -13,6 +13,9 @@ export interface AuthPluginOptions extends MongooseAuthPluginOptions {
   googleClientId: string
   googleClientSecret: string
   googleRedirect: string
+  linkedinClientId: string
+  linkedinClientSecret: string
+  linkedinRedirect: string
   facebookClientId: string
   facebookClientSecret: string
   facebookRedirect: string

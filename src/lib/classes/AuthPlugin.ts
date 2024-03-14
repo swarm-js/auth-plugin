@@ -5,6 +5,7 @@ import { fastifyMiddleware } from './FastifyMiddleware'
 import { Fido2 } from './Fido2'
 import { Google } from './Google'
 import { GoogleAuthenticator } from './GoogleAuthenticator'
+import { Linkedin } from './Linkedin'
 import { Password } from './Password'
 import { Session } from './Session'
 import { UI } from './UI'
@@ -36,6 +37,7 @@ export class AuthPlugin {
       fido2: false,
       facebook: false,
       google: false,
+      linkedin: false,
       ethereum: false,
       register: true,
       emailField: 'email',
@@ -47,6 +49,9 @@ export class AuthPlugin {
       googleClientId: '',
       googleClientSecret: '',
       googleRedirect: '',
+      linkedinClientId: '',
+      linkedinClientSecret: '',
+      linkedinRedirect: '',
       facebookClientId: '',
       facebookClientSecret: '',
       facebookRedirect: '',
@@ -134,6 +139,7 @@ export class AuthPlugin {
     Fido2.setup(swarm, conf)
     Facebook.setup(swarm, conf)
     Google.setup(swarm, conf)
+    Linkedin.setup(swarm, conf)
     Ethereum.setup(swarm, conf)
     Session.setup(swarm, conf)
 

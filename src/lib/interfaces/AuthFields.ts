@@ -16,6 +16,7 @@ export interface AuthFields {
   swarmPassword: string
   swarmFacebookId: string
   swarmGoogleId: string
+  swarmLinkedinId: string
   swarmGoogleAuthenticatorSecret: string
   swarmGoogleAuthenticatorPending: boolean
   swarmEthereumWallet: string

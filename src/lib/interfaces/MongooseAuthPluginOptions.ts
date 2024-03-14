@@ -3,6 +3,7 @@ export interface MongooseAuthPluginOptions {
   fido2: boolean
   facebook: boolean
   google: boolean
+  linkedin: boolean
   googleAuthenticator: boolean
   ethereum: boolean
   invite: boolean
