@@ -2,6 +2,7 @@ import { MongooseAuthPluginOptions } from '../interfaces/MongooseAuthPluginOptio
 import { v4 as uuid } from 'uuid'
 import { Conflict, InternalServerError } from 'http-errors'
 import { Mail } from '@swarmjs/mail'
+import { Crypt } from './Crypt'
 
 export function MongooseAuthPlugin (
   schema: any,
@@ -156,4 +157,21 @@ export function MongooseAuthPlugin (
       }
     )
   }
+  schema.static('login', async function login (email: string, password: string) {
+    email = email.trim().toLowerCase()
+
+    const user = await this.findOne({
+      [conf.emailField]: email
+    })
+
+    if (!user) return null
+
+    try {
+      const passwordValid = await Crypt.verify(password, user.swarmPassword)
+      if (!passwordValid) return null
+      return user
+    } catch {
+      return null
+    }
+  })
 }
