@@ -47,9 +47,9 @@
     <button
       :disabled="/^[0-9]{6}$/.test(totpCode) === false"
       :style="{
-        background: conf.themeColor,
+        background: conf.accentColor,
         color:
-          fontColorContrast(conf.themeColor) === '#000000' ? '#333' : '#fff'
+          fontColorContrast(conf.accentColor) === '#000000' ? '#333' : '#fff'
       }"
       @click="validateNewTotp"
     >
@@ -72,9 +72,9 @@
 
     <button
       :style="{
-        background: conf.themeColor,
+        background: conf.accentColor,
         color:
-          fontColorContrast(conf.themeColor) === '#000000' ? '#333' : '#fff'
+          fontColorContrast(conf.accentColor) === '#000000' ? '#333' : '#fff'
       }"
       @click="doRegisterFido"
     >
@@ -107,9 +107,9 @@
       <button
         :disabled="!allowLogin"
         :style="{
-          background: conf.themeColor,
+          background: conf.accentColor,
           color:
-            fontColorContrast(conf.themeColor) === '#000000' ? '#333' : '#fff'
+            fontColorContrast(conf.accentColor) === '#000000' ? '#333' : '#fff'
         }"
       >
         {{ $t('login.button') }}
