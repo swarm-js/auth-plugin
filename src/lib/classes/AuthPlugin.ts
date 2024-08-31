@@ -63,6 +63,9 @@ export class AuthPlugin {
       ...options
     }
 
+    if (!conf.noGradient) conf.noGradient = false
+    if (!conf.accentColor) conf.accentColor = conf.themeColor
+
     conf.allowedDomains.push(getHost(instance.getOption('baseUrl')) ?? '')
     if (!conf.rpId) conf.rpId = getHostname(instance.getOption('baseUrl'))
     if (!conf.origin) conf.origin = getOrigin(instance.getOption('baseUrl'))

@@ -19,9 +19,9 @@
     <button
       :disabled="/^[0-9]{6}$/.test(totpCode) === false"
       :style="{
-        background: conf.themeColor,
+        background: conf.accentColor,
         color:
-          fontColorContrast(conf.themeColor) === '#000000' ? '#333' : '#fff'
+          fontColorContrast(conf.accentColor) === '#000000' ? '#333' : '#fff'
       }"
       @click="sendTotp"
     >

@@ -3,9 +3,9 @@
     <p>{{ $t('emailConfirmed') }}</p>
     <a
       :style="{
-        background: conf.themeColor,
+        background: conf.accentColor,
         color:
-          fontColorContrast(conf.themeColor) === '#000000' ? '#333' : '#fff'
+          fontColorContrast(conf.accentColor) === '#000000' ? '#333' : '#fff'
       }"
       :href="conf.prefix + '/login?redirect=' + encodeURIComponent(redirect)"
       >{{ $t('login.button') }}</a

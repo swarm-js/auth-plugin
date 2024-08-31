@@ -250,6 +250,8 @@ export class UI {
           window.AuthPluginConf = ${JSON.stringify({
             logo: conf.logo,
             themeColor: conf.themeColor,
+            accentColor: conf.accentColor,
+            noGradient: conf.noGradient,
             logoBackgroundColor: conf.logoBackgroundColor,
             prefix: conf.prefix,
             rpName: conf.rpName,

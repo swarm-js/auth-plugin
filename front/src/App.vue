@@ -18,6 +18,8 @@ declare global {
 const conf = {
   logo: '',
   themeColor: '#8500d2',
+  accentColor: '#8500d2',
+  noGradient: false,
   baseUrl: '/',
   rpName: '',
   password: true,
@@ -35,14 +37,21 @@ const conf = {
 const lightColor = Color(conf.themeColor).lighten(0.5).hex()
 const darkColor = Color(conf.themeColor).darken(0.5).hex()
 
-useStyleTag(`body {
-  background: ${conf.themeColor};
-  background: -webkit-linear-gradient(-135deg,${lightColor},${darkColor});
-  background: -o-linear-gradient(-135deg,${lightColor},${darkColor});
-  background: -moz-linear-gradient(-135deg,${lightColor},${darkColor});
-  background: linear-gradient(-135deg,${lightColor},${darkColor});
+if (conf.noGradient) {
+  useStyleTag(`body {
+    background: ${conf.themeColor};
+  }
+  `)
+} else {
+  useStyleTag(`body {
+    background: ${conf.themeColor};
+    background: -webkit-linear-gradient(-135deg,${lightColor},${darkColor});
+    background: -o-linear-gradient(-135deg,${lightColor},${darkColor});
+    background: -moz-linear-gradient(-135deg,${lightColor},${darkColor});
+    background: linear-gradient(-135deg,${lightColor},${darkColor});
+  }
+  `)
 }
-`)
 
 const page = window.AuthPluginPage ?? 'login'
 </script>
