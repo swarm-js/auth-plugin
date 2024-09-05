@@ -852,10 +852,10 @@
     http-errors "^2.0.0"
     require-main-filename "^2.0.0"
 
-"@swarmjs/mail@^1.0.0":
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/@swarmjs/mail/-/mail-1.0.0.tgz#7f84f812bbe2f5799441eb0178c4e8861ce40b97"
-  integrity sha512-4HznGq+Nmf6zra6sAtzKT/NIArew1vZhxvZ2QNGLYrf07y7TYK0DYdc04/5mfinAwpfwmFpDnnLrFMfqbz74wA==
+"@swarmjs/mail@^1.0.1":
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/@swarmjs/mail/-/mail-1.0.1.tgz#51889a0bee6df82f9fff7acc2a3fd3708caa52a9"
+  integrity sha512-pJ40pKY9BOdnt5WjgOXQnZTlBkO2zCi2RXeWuZ5EybA2Rmg6Yj4M6f3gIvpB0LNk7bYrkA9fJyNNrpl2FGhjNA==
 
 "@swarmjs/mailjet@^1.0.0":
   version "1.0.0"

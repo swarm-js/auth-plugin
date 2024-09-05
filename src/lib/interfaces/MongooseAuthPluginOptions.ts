@@ -1,4 +1,5 @@
 export interface MongooseAuthPluginOptions {
+  accentColor?: string
   password: boolean
   fido2: boolean
   facebook: boolean

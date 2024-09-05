@@ -114,7 +114,9 @@ export function MongooseAuthPlugin (
             },
             null,
             'auth-plugin'
-          )
+          ),
+          600,
+          conf.accentColor
         )
           .header({
             logo: conf.logo,
