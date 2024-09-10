@@ -431,7 +431,9 @@ export class Password {
     }&redirect=${encodeURIComponent(redirect ?? '')}`
 
     const html = Mail.create(
-      request.$t('Please confirm your email address', {}, null, 'auth-plugin')
+      request.$t('Please confirm your email address', {}, null, 'auth-plugin'),
+      600,
+      conf.accentColor
     )
       .header({
         logo: conf.logo,
@@ -549,7 +551,9 @@ export class Password {
         }&redirect=${encodeURIComponent(request.body.redirect ?? '')}`
 
         const html = Mail.create(
-          request.$t('Magic link', {}, null, 'auth-plugin')
+          request.$t('Magic link', {}, null, 'auth-plugin'),
+          600,
+          conf.accentColor
         )
           .header({
             logo: conf.logo,
