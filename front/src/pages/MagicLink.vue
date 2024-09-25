@@ -69,6 +69,7 @@ let magiclinkError = ref(false)
 let magiclinkErrorMessage = ref('')
 let loading = ref(true)
 let confirm = ref(false)
+let sending = ref(false)
 
 if (!redirect) {
   error = true
@@ -104,8 +105,9 @@ function handleError(msg: string) {
 }
 
 async function trymagiclink() {
-  if (!allowmagiclink) return
-
+  if (!allowmagiclink.value) return
+  if (sending.value) return
+  sending.value = true
   try {
     const ret = await api.post(`/magic-link`, {
       email: form.email,
@@ -115,6 +117,7 @@ async function trymagiclink() {
   } catch {
     handleError($t('error.magiclink'))
   }
+  sending.value = false
 }
 </script>
 
