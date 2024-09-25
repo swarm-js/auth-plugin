@@ -626,10 +626,15 @@ export class Password {
         )
           throw new Forbidden()
 
-        redirect.searchParams.set('token', token)
+        reply.redirect(
+          request.query.redirect +
+            (request.query.redirect.includes('?') ? '&' : '?') +
+            'token=' +
+            token
+        )
+      } else {
+        reply.redirect(request.query.redirect)
       }
-
-      reply.redirect(redirect.toString())
     }
   }
 }

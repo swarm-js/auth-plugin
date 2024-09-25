@@ -16,7 +16,7 @@
 
     <div class="alert" v-if="magiclinkError">{{ magiclinkErrorMessage }}</div>
 
-    <form @submit.native.prevent="trymagiclink" v-if="conf.password">
+    <form @submit.native.prevent v-if="conf.password">
       <label>
         {{ $t('magiclink.email') }}
         <input type="email" v-model="form.email" @keyup.enter="trymagiclink" />
@@ -28,6 +28,7 @@
           color:
             fontColorContrast(conf.accentColor) === '#000000' ? '#333' : '#fff'
         }"
+        @click="trymagiclink"
       >
         {{ $t('magiclink.button') }}
       </button>
