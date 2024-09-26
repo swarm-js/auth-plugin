@@ -108,9 +108,8 @@ async function tryacceptInvitation() {
       password: form.password,
       redirect
     })
-    const url = new URL(redirect)
-    url.searchParams.set('token', ret.token)
-    window.location.href = url.toString()
+    window.location.href =
+      redirect + (redirect.includes('?') ? '&' : '?') + 'token=' + ret.token
   } catch {
     handleError($t('error.acceptInvitation'))
   }

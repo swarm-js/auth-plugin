@@ -193,9 +193,8 @@ Request ID : ${requestId}`,
     if (err) {
       emit('error', errMsg)
     } else {
-      const url = new URL(redirect)
-      url.searchParams.set('token', token)
-      window.location.href = url.toString()
+      window.location.href =
+        redirect + (redirect.includes('?') ? '&' : '?') + 'token=' + token
     }
   } catch {
     emit('error', $t('error.ethereum'))

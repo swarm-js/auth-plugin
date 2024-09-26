@@ -198,9 +198,8 @@ if (!redirect) {
     )
       throw new Error('Domain not allowed')
     if (token) {
-      const url = new URL(redirect)
-      url.searchParams.set('token', token)
-      window.location.href = url.toString()
+      window.location.href =
+        redirect + (redirect.includes('?') ? '&' : '?') + 'token=' + token
     } else if (conf.fido2 && isFidoSetup()) {
       tryFidoLogin()
     }
@@ -234,9 +233,8 @@ async function proposeFido(token: string) {
 async function tryFidoLogin() {
   const token = await loginFido(api)
   if (token) {
-    const url = new URL(redirect)
-    url.searchParams.set('token', token)
-    window.location.href = url.toString()
+    window.location.href =
+      redirect + (redirect.includes('?') ? '&' : '?') + 'token=' + token
   }
 }
 
@@ -358,9 +356,9 @@ async function tryLogin() {
         await proposeTotp(ret.token)
       }
       if (conf.fido2 && canSetupFido()) await proposeFido(ret.token)
-      const url = new URL(redirect)
-      url.searchParams.set('token', ret.token)
-      window.location.href = url.toString()
+
+      window.location.href =
+        redirect + (redirect.includes('?') ? '&' : '?') + 'token=' + ret.token
     }
   } catch {
     handleError($t('error.login'))

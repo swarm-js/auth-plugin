@@ -109,9 +109,8 @@ if (!redirect) {
     )
       throw new Error('Domain not allowed')
     if (token) {
-      const url = new URL(redirect)
-      url.searchParams.set('token', token)
-      window.location.href = url.toString()
+      window.location.href =
+        redirect + (redirect.includes('?') ? '&' : '?') + 'token=' + token
     }
   } catch (err) {
     error = true
@@ -166,9 +165,8 @@ async function tryregister() {
     if (ret.validationRequired) {
       validationRequired.value = true
     } else {
-      const url = new URL(redirect)
-      url.searchParams.set('token', ret.token)
-      window.location.href = url.toString()
+      window.location.href =
+        redirect + (redirect.includes('?') ? '&' : '?') + 'token=' + ret.token
     }
   } catch {
     handleError($t('error.register'))
